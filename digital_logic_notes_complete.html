@@ -1,0 +1,2819 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Digital Logic — Complete Notes (L18–L30)</title>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&family=Source+Serif+4:ital,wght@0,300;0,400;0,600;1,400&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0e14;--s1:#10161f;--s2:#151c27;--s3:#1a2233;
+  --b:#1e2a3a;--b2:#243040;
+  --t:#dde6f0;--m:#7a8fa8;--m2:#556070;
+  --blue:#4d9de0;--cyan:#3dd9c8;--green:#4ec94e;
+  --yellow:#e8c84a;--orange:#e88c4a;--red:#e85a4a;
+  --purple:#b07bff;--pink:#e06daa;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--t);font-family:'Source Serif 4',Georgia,serif;font-size:16px;line-height:1.75}
+
+/* ── TOP NAV ── */
+#topnav{
+  position:sticky;top:0;z-index:200;
+  background:rgba(10,14,20,.97);
+  border-bottom:1px solid var(--b2);
+  display:flex;align-items:center;gap:0;
+  height:44px;overflow-x:auto;padding:0 .75rem;
+  white-space:nowrap;
+}
+#topnav .brand{
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:.9rem;
+  color:var(--cyan);margin-right:.75rem;flex-shrink:0;
+}
+#topnav a{
+  font-family:'JetBrains Mono',monospace;font-size:10.5px;
+  color:var(--m);text-decoration:none;
+  padding:5px 9px;border-radius:4px;flex-shrink:0;
+  transition:all .15s;
+}
+#topnav a:hover{color:var(--blue);background:rgba(77,157,224,.12)}
+
+/* ── LAYOUT ── */
+.wrap{max-width:1040px;margin:0 auto;padding:2rem 1.25rem 6rem}
+
+/* ── HERO ── */
+.hero{
+  text-align:center;padding:3rem 1rem 2.5rem;margin-bottom:2.5rem;
+  background:linear-gradient(135deg,rgba(77,157,224,.07),rgba(61,217,200,.05));
+  border:1px solid var(--b2);border-radius:14px;
+}
+.hero h1{
+  font-family:'Space Grotesk',sans-serif;font-size:2rem;font-weight:700;
+  background:linear-gradient(90deg,var(--blue),var(--cyan));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+  margin-bottom:.4rem;
+}
+.hero p{color:var(--m);font-size:.95rem}
+.hero .pills{display:flex;flex-wrap:wrap;gap:.4rem;justify-content:center;margin-top:.9rem}
+.pill{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  padding:3px 11px;border-radius:20px;
+  border:1px solid var(--b2);color:var(--m);
+}
+
+/* ── LECTURE WRAPPER ── */
+.lec{margin-bottom:4rem;scroll-margin-top:52px}
+.lec-hdr{
+  display:flex;align-items:center;gap:.75rem;
+  padding:1rem 1.25rem;margin-bottom:1.5rem;
+  background:var(--s2);border:1px solid var(--b2);border-radius:10px;
+  border-left:4px solid var(--blue);
+}
+.lec-num{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--bg);background:var(--blue);
+  padding:3px 10px;border-radius:20px;flex-shrink:0;
+}
+.lec-title{font-family:'Space Grotesk',sans-serif;font-size:1.35rem;font-weight:700}
+
+/* ── CARD ── */
+.card{
+  background:var(--s1);border:1px solid var(--b);
+  border-radius:10px;padding:1.5rem;margin-bottom:1.25rem;
+}
+.card-title{
+  font-family:'Space Grotesk',sans-serif;font-size:.95rem;font-weight:600;
+  color:var(--blue);margin-bottom:1rem;display:flex;align-items:center;gap:.5rem;
+}
+.card-title::before{
+  content:'';display:inline-block;width:3px;height:15px;
+  background:var(--blue);border-radius:2px;flex-shrink:0;
+}
+
+/* subtitles */
+.sub{font-family:'Space Grotesk',sans-serif;font-size:.85rem;font-weight:600;
+  color:var(--cyan);margin:.9rem 0 .45rem;text-transform:uppercase;letter-spacing:.06em}
+
+p{margin-bottom:.6rem}
+p:last-child{margin-bottom:0}
+
+/* ── GRID ── */
+.g2{display:grid;grid-template-columns:1fr 1fr;gap:1.1rem}
+.g3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:1rem}
+@media(max-width:680px){.g2,.g3{grid-template-columns:1fr}}
+
+/* ── TABLE ── */
+.tbl-wrap{overflow-x:auto;margin:.7rem 0}
+table{width:100%;border-collapse:collapse;
+  font-family:'JetBrains Mono',monospace;font-size:12.5px}
+th{background:var(--s3);color:var(--cyan);padding:7px 10px;
+  text-align:center;border:1px solid var(--b2);
+  font-family:'Space Grotesk',sans-serif;font-size:11px;
+  font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+td{padding:5.5px 10px;text-align:center;border:1px solid var(--b);color:var(--t)}
+tr:nth-child(even) td{background:rgba(255,255,255,.018)}
+.tr-set td{background:rgba(77,157,224,.1)!important;color:var(--blue)}
+.tr-rst td{background:rgba(232,138,74,.1)!important;color:var(--orange)}
+.tr-tog td{background:rgba(78,201,78,.1)!important;color:var(--green)}
+.tr-bad td{background:rgba(232,90,74,.1)!important;color:var(--red)}
+.tr-hld td{background:rgba(122,143,168,.08)!important;color:var(--m)}
+
+/* ── BOXES ── */
+.def{
+  background:rgba(77,157,224,.06);border-left:3px solid var(--blue);
+  border-radius:0 7px 7px 0;padding:.7rem 1rem;margin:.7rem 0;font-style:italic
+}
+.key{
+  background:rgba(78,201,78,.06);border:1px solid rgba(78,201,78,.25);
+  border-radius:7px;padding:.7rem 1rem;margin:.7rem 0
+}
+.key strong{color:var(--green)}
+.warn{
+  background:rgba(232,138,74,.07);border:1px solid rgba(232,138,74,.25);
+  border-radius:7px;padding:.7rem 1rem;margin:.7rem 0
+}
+.warn strong{color:var(--orange)}
+.tip{
+  background:rgba(176,123,255,.07);border:1px solid rgba(176,123,255,.25);
+  border-radius:7px;padding:.7rem 1rem;margin:.7rem 0
+}
+.tip strong{color:var(--purple)}
+
+/* ── FORMULA ── */
+.eq{
+  font-family:'JetBrains Mono',monospace;font-size:.9em;
+  background:var(--s3);border:1px solid var(--b2);border-radius:7px;
+  padding:.55rem 1rem;margin:.5rem 0;color:var(--yellow);text-align:center
+}
+
+/* ── DIAGRAM WRAPPER ── */
+.diag{
+  background:var(--s2);border:1px solid var(--b2);
+  border-radius:8px;padding:1.25rem;margin:.9rem 0;
+  overflow-x:auto;text-align:center
+}
+.diag-lbl{
+  font-family:'JetBrains Mono',monospace;font-size:10px;
+  color:var(--m);text-align:center;margin-top:.5rem;
+  text-transform:uppercase;letter-spacing:.08em
+}
+
+/* ── LIST ── */
+ul.n{list-style:none;padding:0}
+ul.n li{padding:.2rem 0 .2rem 1.3rem;position:relative}
+ul.n li::before{
+  content:'▸';position:absolute;left:0;
+  color:var(--blue);font-size:.78em;top:.35rem
+}
+
+/* ── STEPS ── */
+.steps{margin:.5rem 0}
+.step{display:flex;gap:.8rem;margin-bottom:.6rem;align-items:flex-start}
+.sn{
+  flex-shrink:0;width:24px;height:24px;
+  background:var(--blue);color:var(--bg);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Space Grotesk',sans-serif;font-weight:700;font-size:11px;
+  margin-top:3px
+}
+code{
+  font-family:'JetBrains Mono',monospace;font-size:.83em;
+  background:var(--s3);border:1px solid var(--b2);
+  padding:1px 5px;border-radius:4px;color:var(--cyan)
+}
+hr{border:none;border-top:1px solid var(--b);margin:1.1rem 0}
+
+svg text{font-family:'JetBrains Mono',monospace}
+</style>
+</head>
+<body>
+<div id="topnav">
+  <span class="brand">⬡ Digital Logic</span>
+  <a href="#l18">L18·SR Latches</a>
+  <a href="#l19">L19·D Flip-Flop</a>
+  <a href="#l20">L20·JK/T FF</a>
+  <a href="#l21">L21·Analysis</a>
+  <a href="#l23">L23·Design</a>
+  <a href="#l24">L24·Excitation</a>
+  <a href="#l25">L25·Practice</a>
+  <a href="#l26">L26·Registers</a>
+  <a href="#l27">L27·Shift Reg</a>
+  <a href="#l28">L28·Counters</a>
+  <a href="#l29">L29·Sync Ctr</a>
+  <a href="#l30">L30·Memory</a>
+</div>
+<div class="wrap">
+<div class="hero">
+  <h1>Digital Logic — Complete Notes</h1>
+  <p>Lectures 18–30 · Every topic · Gate circuits · Truth tables · Timing diagrams</p>
+  <div class="pills">
+    <span class="pill">SR/D/JK/T Flip-Flops</span><span class="pill">Sequential Analysis &amp; Design</span>
+    <span class="pill">Shift Registers</span><span class="pill">Ripple &amp; Sync Counters</span>
+    <span class="pill">RAM &amp; ROM</span>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════ LECTURE 18 ═══════════════════════════════ -->
+<div class="lec" id="l18">
+<div class="lec-hdr">
+  <span class="lec-num">LECTURE 18</span>
+  <h2 class="lec-title">Sequential Circuits &amp; Latches</h2>
+</div>
+
+<!-- 1. Combinational vs Sequential -->
+<div class="card">
+<div class="card-title">1. Combinational vs Sequential Circuits</div>
+<div class="g2">
+<div>
+<div class="sub">Combinational Circuit</div>
+<div class="def">Output depends <em>only</em> on present inputs. No memory. No feedback.</div>
+<ul class="n">
+  <li>Same inputs → always same output</li>
+  <li>Examples: AND gate, adder, multiplexer, decoder</li>
+  <li>Described by Boolean function</li>
+  <li>No clock required</li>
+</ul>
+</div>
+<div>
+<div class="sub">Sequential Circuit</div>
+<div class="def">Output depends on present inputs <em>and</em> past history (state). Has memory and feedback.</div>
+<ul class="n">
+  <li>Same inputs may give different outputs depending on state</li>
+  <li>Examples: registers, counters, FSMs</li>
+  <li>Described by state table / state diagram</li>
+  <li>Usually clocked</li>
+</ul>
+</div>
+</div>
+<div class="diag">
+<svg width="580" height="140" viewBox="0 0 580 140">
+  <!-- Comb block -->
+  <rect x="160" y="20" width="120" height="65" rx="7" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <text x="220" y="49" fill="#4d9de0" font-size="13" text-anchor="middle" font-weight="700">Combinational</text>
+  <text x="220" y="67" fill="#7a8fa8" font-size="10" text-anchor="middle">Logic Circuit</text>
+  <!-- Inputs -->
+  <line x1="80" y1="38" x2="160" y2="38" stroke="#4ec94e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="80" y1="68" x2="160" y2="68" stroke="#4ec94e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="20" y="42" fill="#4ec94e" font-size="12">x₁</text>
+  <text x="20" y="72" fill="#4ec94e" font-size="12">x₂</text>
+  <!-- Outputs -->
+  <line x1="280" y1="38" x2="360" y2="38" stroke="#e88c4a" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="280" y1="68" x2="360" y2="68" stroke="#e88c4a" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="365" y="42" fill="#e88c4a" font-size="12">y₁</text>
+  <text x="365" y="72" fill="#e88c4a" font-size="12">y₂</text>
+  <!-- Memory block -->
+  <rect x="160" y="100" width="120" height="35" rx="6" fill="#151c27" stroke="#b07bff" stroke-width="1.5"/>
+  <text x="220" y="122" fill="#b07bff" font-size="12" text-anchor="middle">Memory (State)</text>
+  <!-- feedback from output to memory -->
+  <path d="M320 52 Q430 52 430 118 Q430 118 280 118" stroke="#b07bff" stroke-width="1.2" fill="none" stroke-dasharray="5,2" marker-end="url(#arr2)"/>
+  <!-- memory to comb input -->
+  <path d="M160 118 Q100 118 100 90 Q100 52 160 52" stroke="#3dd9c8" stroke-width="1.2" fill="none" stroke-dasharray="5,2" marker-end="url(#arr2)"/>
+  <text x="415" y="90" fill="#b07bff" font-size="10">Next state</text>
+  <text x="100" y="95" fill="#3dd9c8" font-size="10">State</text>
+  <text x="160" y="96" fill="#3dd9c8" font-size="10" text-anchor="middle">↑</text>
+  <defs>
+    <marker id="arr" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0,0 7,3.5 0,7" fill="#4d9de0"/></marker>
+    <marker id="arr2" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0,0 7,3.5 0,7" fill="#b07bff"/></marker>
+  </defs>
+</svg>
+<div class="diag-lbl">General Sequential Circuit — Combinational Logic + Memory with Feedback</div>
+</div>
+</div>
+
+<!-- 2. Bistable Element -->
+<div class="card">
+<div class="card-title">2. Bistable Element — The Concept of Memory</div>
+<p>A <strong>bistable element</strong> has two stable states: <strong>0</strong> and <strong>1</strong>. It stays in either state indefinitely until forced to change.</p>
+<div class="g2">
+<div>
+<ul class="n">
+  <li>Two cross-coupled inverters = simplest bistable</li>
+  <li>Output Q̄ feeds back to Q's input and vice versa</li>
+  <li>Once set to a state, it holds that state — this is <strong>memory</strong></li>
+  <li>No inputs to control it → no useful memory device alone</li>
+  <li>Adding control inputs → SR Latch</li>
+</ul>
+</div>
+<div>
+<div class="diag">
+<svg width="220" height="90" viewBox="0 0 220 90">
+  <!-- Inverter 1 -->
+  <polygon points="50,20 90,45 50,70" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <circle cx="93" cy="45" r="4" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <!-- Inverter 2 -->
+  <polygon points="170,20 130,45 170,70" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <circle cx="127" cy="45" r="4" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <!-- Top feedback wire -->
+  <line x1="97" y1="45" x2="110" y2="45" stroke="#4ec94e" stroke-width="1.5"/>
+  <line x1="110" y1="45" x2="110" y2="10" stroke="#4ec94e" stroke-width="1.5"/>
+  <line x1="110" y1="10" x2="50" y2="10" stroke="#4ec94e" stroke-width="1.5"/>
+  <line x1="50" y1="10" x2="50" y2="20" stroke="#4ec94e" stroke-width="1.5"/>
+  <!-- Bottom feedback wire -->
+  <line x1="123" y1="45" x2="110" y2="45" stroke="#e88c4a" stroke-width="1.5"/>
+  <line x1="110" y1="80" x2="50" y2="80" stroke="#e88c4a" stroke-width="1.5"/>
+  <line x1="110" y1="45" x2="110" y2="80" stroke="#e88c4a" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <line x1="170" y1="70" x2="170" y2="80" stroke="#e88c4a" stroke-width="1.2"/>
+  <line x1="50" y1="80" x2="50" y2="70" stroke="#e88c4a" stroke-width="1.2"/>
+  <!-- Q and Q-bar labels -->
+  <text x="97" y="40" fill="#4ec94e" font-size="11">Q</text>
+  <text x="110" y="40" fill="#e88c4a" font-size="11">Q̄</text>
+  <text x="75" y="88" fill="#7a8fa8" font-size="9">Two cross-coupled inverters</text>
+</svg>
+<div class="diag-lbl">Bistable — Cross-Coupled Inverters</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 3. SR NOR LATCH -->
+<div class="card">
+<div class="card-title">3. SR Latch Using NOR Gates — Gate-Level Circuit</div>
+<div class="def">The SR (Set-Reset) latch is built from two cross-coupled NOR gates. S=Set forces Q=1; R=Reset forces Q=0.</div>
+<div class="g2">
+<div>
+<div class="diag">
+<svg width="320" height="200" viewBox="0 0 320 200">
+  <!-- NOR gate 1 symbol (upper) — body + curved sides -->
+  <!-- Body of NOR1 -->
+  <path d="M 90,30 Q 110,30 120,55 Q 110,80 90,80 Q 105,55 90,30 Z" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <!-- NOR bubble -->
+  <circle cx="124" cy="55" r="5" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <!-- NOR gate 2 symbol (lower) -->
+  <path d="M 90,120 Q 110,120 120,145 Q 110,170 90,170 Q 105,145 90,120 Z" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <circle cx="124" cy="145" r="5" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <!-- Labels inside gates -->
+  <text x="100" y="51" fill="#4d9de0" font-size="9" text-anchor="middle">NOR</text>
+  <text x="100" y="63" fill="#4d9de0" font-size="9" text-anchor="middle">1</text>
+  <text x="100" y="141" fill="#4d9de0" font-size="9" text-anchor="middle">NOR</text>
+  <text x="100" y="153" fill="#4d9de0" font-size="9" text-anchor="middle">2</text>
+  <!-- S input (to upper NOR, pin 1) -->
+  <line x1="20" y1="42" x2="90" y2="42" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="4" y="47" fill="#4ec94e" font-size="13" font-weight="700">S</text>
+  <!-- R input (to lower NOR, pin 1) -->
+  <line x1="20" y1="158" x2="90" y2="158" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="4" y="162" fill="#e88c4a" font-size="13" font-weight="700">R</text>
+  <!-- Q output from NOR1 -->
+  <line x1="129" y1="55" x2="290" y2="55" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="294" y="59" fill="#4ec94e" font-size="13" font-weight="700">Q</text>
+  <!-- Q-bar output from NOR2 -->
+  <line x1="129" y1="145" x2="290" y2="145" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="293" y="149" fill="#e88c4a" font-size="13" font-weight="700">Q̄</text>
+  <!-- Feedback: Q → NOR2 input pin 2 (from Q line back to NOR2) -->
+  <line x1="200" y1="55" x2="200" y2="95" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="200" y1="95" x2="65" y2="95" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="65" y1="95" x2="65" y2="132" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="65" y1="132" x2="90" y2="132" stroke="#3dd9c8" stroke-width="1.5"/>
+  <!-- Feedback: Q-bar → NOR1 input pin 2 -->
+  <line x1="190" y1="145" x2="190" y2="105" stroke="#b07bff" stroke-width="1.5"/>
+  <line x1="190" y1="105" x2="60" y2="105" stroke="#b07bff" stroke-width="1.5"/>
+  <line x1="60" y1="105" x2="60" y2="68" stroke="#b07bff" stroke-width="1.5"/>
+  <line x1="60" y1="68" x2="90" y2="68" stroke="#b07bff" stroke-width="1.5"/>
+  <!-- dots at junctions -->
+  <circle cx="200" cy="55" r="3" fill="#3dd9c8"/>
+  <circle cx="190" cy="145" r="3" fill="#b07bff"/>
+  <!-- feedback labels -->
+  <text x="205" y="80" fill="#3dd9c8" font-size="9">Q→NOR2</text>
+  <text x="170" y="120" fill="#b07bff" font-size="9">Q̄→NOR1</text>
+</svg>
+<div class="diag-lbl">SR Latch — NOR Gate Level Circuit</div>
+</div>
+</div>
+<div>
+<div class="sub">Truth Table</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>S</th><th>R</th><th>Q(t)</th><th>Q(t+1)</th><th>Q̄(t+1)</th><th>Operation</th></tr>
+<tr class="tr-hld"><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>Hold</td></tr>
+<tr class="tr-hld"><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>Hold</td></tr>
+<tr class="tr-rst"><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>Reset</td></tr>
+<tr class="tr-rst"><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>Reset</td></tr>
+<tr class="tr-set"><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>Set</td></tr>
+<tr class="tr-set"><td>1</td><td>0</td><td>1</td><td>1</td><td>0</td><td>Set</td></tr>
+<tr class="tr-bad"><td>1</td><td>1</td><td>X</td><td>0</td><td>0</td><td>⚠ FORBIDDEN</td></tr>
+</table>
+</div>
+<div class="warn"><strong>Why S=R=1 is Forbidden:</strong> Both NOR gates output 0, making Q=Q̄=0. This violates the complementary output requirement. When both return to 0, the final state is unpredictable (race condition).</div>
+<div class="eq">Q(t+1) = S + R̄·Q &nbsp; (with constraint S·R = 0)</div>
+<div class="sub">How NOR Latch Works:</div>
+<ul class="n">
+  <li><strong>S=1,R=0:</strong> NOR1 output forced to 0 (since any input 1 → NOR=0). Q̄=0 → NOR2: both inputs 0 → Q=1 ✓</li>
+  <li><strong>S=0,R=1:</strong> NOR2 output forced to 0. Q=0 → NOR1: both inputs 0 → Q̄=1 ✓</li>
+  <li><strong>S=0,R=0:</strong> Each gate output depends only on the other's output → holds previous state</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- 4. NAND SR Latch -->
+<div class="card">
+<div class="card-title">4. S̄R̄ Latch Using NAND Gates — Active-LOW Inputs</div>
+<p>Built from two cross-coupled NAND gates. Inputs are <strong>active-LOW</strong> — apply 0 to trigger action.</p>
+<div class="g2">
+<div>
+<div class="diag">
+<svg width="310" height="200" viewBox="0 0 310 200">
+  <!-- NAND gate 1 (upper) -->
+  <line x1="90" y1="25" x2="90" y2="75" stroke="#b07bff" stroke-width="1.8"/>
+  <path d="M 90,25 Q 130,25 130,50 Q 130,75 90,75" fill="#151c27" stroke="#b07bff" stroke-width="1.8"/>
+  <!-- NAND bubble 1 -->
+  <circle cx="135" cy="50" r="5" fill="#151c27" stroke="#b07bff" stroke-width="1.8"/>
+  <!-- NAND gate 2 (lower) -->
+  <line x1="90" y1="125" x2="90" y2="175" stroke="#b07bff" stroke-width="1.8"/>
+  <path d="M 90,125 Q 130,125 130,150 Q 130,175 90,175" fill="#151c27" stroke="#b07bff" stroke-width="1.8"/>
+  <circle cx="135" cy="150" r="5" fill="#151c27" stroke="#b07bff" stroke-width="1.8"/>
+  <!-- labels -->
+  <text x="108" y="46" fill="#b07bff" font-size="9">NAND</text>
+  <text x="113" y="58" fill="#b07bff" font-size="9">1</text>
+  <text x="108" y="146" fill="#b07bff" font-size="9">NAND</text>
+  <text x="113" y="158" fill="#b07bff" font-size="9">2</text>
+  <!-- S-bar input -->
+  <line x1="20" y1="38" x2="90" y2="38" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="4" y="42" fill="#4ec94e" font-size="12">S̄</text>
+  <!-- R-bar input -->
+  <line x1="20" y1="162" x2="90" y2="162" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="4" y="166" fill="#e88c4a" font-size="12">R̄</text>
+  <!-- Q output -->
+  <line x1="140" y1="50" x2="285" y2="50" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="289" y="54" fill="#4ec94e" font-size="13" font-weight="700">Q</text>
+  <!-- Q-bar output -->
+  <line x1="140" y1="150" x2="285" y2="150" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="288" y="154" fill="#e88c4a" font-size="13" font-weight="700">Q̄</text>
+  <!-- Feedback: Q → NAND2 pin 2 -->
+  <line x1="200" y1="50" x2="200" y2="95" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="200" y1="95" x2="65" y2="95" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="65" y1="95" x2="65" y2="138" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="65" y1="138" x2="90" y2="138" stroke="#3dd9c8" stroke-width="1.5"/>
+  <!-- Feedback: Q-bar → NAND1 pin 2 -->
+  <line x1="190" y1="150" x2="190" y2="105" stroke="#e85a4a" stroke-width="1.5"/>
+  <line x1="190" y1="105" x2="60" y2="105" stroke="#e85a4a" stroke-width="1.5"/>
+  <line x1="60" y1="105" x2="60" y2="62" stroke="#e85a4a" stroke-width="1.5"/>
+  <line x1="60" y1="62" x2="90" y2="62" stroke="#e85a4a" stroke-width="1.5"/>
+  <circle cx="200" cy="50" r="3" fill="#3dd9c8"/>
+  <circle cx="190" cy="150" r="3" fill="#e85a4a"/>
+</svg>
+<div class="diag-lbl">S̄R̄ Latch — NAND Gate Level Circuit (Active-LOW)</div>
+</div>
+</div>
+<div>
+<div class="sub">Truth Table (Active-LOW)</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>S̄</th><th>R̄</th><th>Q(t+1)</th><th>Q̄(t+1)</th><th>Operation</th></tr>
+<tr class="tr-hld"><td>1</td><td>1</td><td>Q</td><td>Q̄</td><td>Hold</td></tr>
+<tr class="tr-set"><td>0</td><td>1</td><td>1</td><td>0</td><td>Set (S̄=0 active)</td></tr>
+<tr class="tr-rst"><td>1</td><td>0</td><td>0</td><td>1</td><td>Reset (R̄=0 active)</td></tr>
+<tr class="tr-bad"><td>0</td><td>0</td><td>1</td><td>1</td><td>⚠ FORBIDDEN</td></tr>
+</table>
+</div>
+<div class="key"><strong>Key Difference from NOR Latch:</strong>
+<ul class="n">
+  <li>NOR latch: HIGH (1) is active → apply 1 to set/reset</li>
+  <li>NAND latch: LOW (0) is active → apply 0 to set/reset</li>
+  <li>NAND forbidden: S̄=R̄=0 (both LOW) → Q=Q̄=1</li>
+  <li>NOR forbidden: S=R=1 (both HIGH) → Q=Q̄=0</li>
+</ul>
+</div>
+<div class="sub">NAND Analysis:</div>
+<ul class="n">
+  <li>NAND truth: output=0 only when ALL inputs=1</li>
+  <li>S̄=0 forces NAND1 output=1 (Q=1, Set)</li>
+  <li>R̄=0 forces NAND2 output=1 (Q̄=1, then Q=0, Reset)</li>
+</ul>
+</div>
+</div>
+</div>
+
+<!-- 5. SR Latch with Enable -->
+<div class="card">
+<div class="card-title">5. SR Latch with Enable (Control) Input — Gate-Level</div>
+<p>Adds an <strong>enable (EN)</strong> signal that gates the S and R inputs. The latch is transparent only when EN=1. This is done by adding two AND gates before the NOR/NAND latch.</p>
+<div class="g2">
+<div>
+<div class="diag">
+<svg width="400" height="210" viewBox="0 0 400 210">
+  <!-- AND gate for S  -->
+  <line x1="70" y1="28" x2="70" y2="55" stroke="#4ec94e" stroke-width="1.5"/>
+  <path d="M 70,28 Q 100,28 100,41 Q 100,55 70,55" fill="#151c27" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="80" y="38" fill="#4ec94e" font-size="8">AND</text>
+  <!-- AND gate for R -->
+  <line x1="70" y1="145" x2="70" y2="172" stroke="#e88c4a" stroke-width="1.5"/>
+  <path d="M 70,145 Q 100,145 100,158 Q 100,172 70,172" fill="#151c27" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="80" y="155" fill="#e88c4a" font-size="8">AND</text>
+  <!-- S input -->
+  <line x1="10" y1="35" x2="70" y2="35" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="2" y="39" fill="#4ec94e" font-size="12" font-weight="700">S</text>
+  <!-- R input -->
+  <line x1="10" y1="165" x2="70" y2="165" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="2" y="169" fill="#e88c4a" font-size="12" font-weight="700">R</text>
+  <!-- EN line -->
+  <line x1="10" y1="100" x2="50" y2="100" stroke="#3dd9c8" stroke-width="1.5"/>
+  <text x="2" y="104" fill="#3dd9c8" font-size="10">EN</text>
+  <!-- EN to AND1 pin2 -->
+  <line x1="50" y1="100" x2="50" y2="48" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="50" y1="48" x2="70" y2="48" stroke="#3dd9c8" stroke-width="1.5"/>
+  <!-- EN to AND2 pin2 -->
+  <line x1="50" y1="100" x2="50" y2="158" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="50" y1="158" x2="70" y2="158" stroke="#3dd9c8" stroke-width="1.5"/>
+  <circle cx="50" cy="100" r="3" fill="#3dd9c8"/>
+  <!-- AND outputs to NOR latch -->
+  <line x1="100" y1="41" x2="140" y2="41" stroke="#4ec94e" stroke-width="1.5"/>
+  <line x1="100" y1="158" x2="140" y2="158" stroke="#e88c4a" stroke-width="1.5"/>
+  <!-- NOR gate 1 -->
+  <path d="M 140,20 Q 168,20 178,41 Q 168,62 140,62 Q 156,41 140,20 Z" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <circle cx="182" cy="41" r="4" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <text x="155" y="37" fill="#4d9de0" font-size="8">NOR</text>
+  <!-- NOR gate 2 -->
+  <path d="M 140,137 Q 168,137 178,158 Q 168,179 140,179 Q 156,158 140,137 Z" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <circle cx="182" cy="158" r="4" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <text x="155" y="154" fill="#4d9de0" font-size="8">NOR</text>
+  <!-- Q output -->
+  <line x1="186" y1="41" x2="350" y2="41" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="354" y="45" fill="#4ec94e" font-size="13" font-weight="700">Q</text>
+  <!-- Q-bar output -->
+  <line x1="186" y1="158" x2="350" y2="158" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="353" y="162" fill="#e88c4a" font-size="13" font-weight="700">Q̄</text>
+  <!-- Feedback Q → NOR2 -->
+  <line x1="270" y1="41" x2="270" y2="100" stroke="#3dd9c8" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <line x1="270" y1="100" x2="120" y2="100" stroke="#3dd9c8" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <line x1="120" y1="100" x2="120" y2="150" stroke="#3dd9c8" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <line x1="120" y1="150" x2="140" y2="150" stroke="#3dd9c8" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <!-- Feedback Q-bar → NOR1 -->
+  <line x1="260" y1="158" x2="260" y2="105" stroke="#b07bff" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <line x1="260" y1="105" x2="115" y2="105" stroke="#b07bff" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <line x1="115" y1="105" x2="115" y2="55" stroke="#b07bff" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <line x1="115" y1="55" x2="140" y2="55" stroke="#b07bff" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <circle cx="270" cy="41" r="3" fill="#3dd9c8"/>
+  <circle cx="260" cy="158" r="3" fill="#b07bff"/>
+  <!-- EN labels -->
+  <text x="30" y="90" fill="#3dd9c8" font-size="9">EN goes to both AND gates</text>
+</svg>
+<div class="diag-lbl">SR Latch with Enable — Uses 2 AND + 2 NOR Gates</div>
+</div>
+</div>
+<div>
+<div class="sub">Truth Table</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>EN</th><th>S</th><th>R</th><th>Q(t+1)</th><th>Action</th></tr>
+<tr class="tr-hld"><td>0</td><td>X</td><td>X</td><td>Q(t)</td><td>Disabled (hold)</td></tr>
+<tr class="tr-hld"><td>1</td><td>0</td><td>0</td><td>Q(t)</td><td>Hold</td></tr>
+<tr class="tr-rst"><td>1</td><td>0</td><td>1</td><td>0</td><td>Reset</td></tr>
+<tr class="tr-set"><td>1</td><td>1</td><td>0</td><td>1</td><td>Set</td></tr>
+<tr class="tr-bad"><td>1</td><td>1</td><td>1</td><td>?</td><td>⚠ FORBIDDEN</td></tr>
+</table>
+</div>
+<div class="key"><strong>How the AND gates work:</strong><br>
+When EN=0: AND1 output = S·0 = 0, AND2 output = R·0 = 0 → NOR latch sees 0,0 → holds state.<br>
+When EN=1: AND1 output = S·1 = S, AND2 output = R·1 = R → NOR latch operates normally.</div>
+</div>
+</div>
+</div>
+
+<!-- 6. Timing Diagram -->
+<div class="card">
+<div class="card-title">6. Timing Diagram — SR Latch with Enable</div>
+<p>A timing diagram shows the waveform of each signal over time. Key observation: Q changes only when EN=1.</p>
+<div class="diag">
+<svg width="620" height="190" viewBox="0 0 620 190">
+  <!-- Labels -->
+  <text x="8" y="28" fill="#3dd9c8" font-size="12" font-weight="700">EN</text>
+  <text x="8" y="68" fill="#4ec94e" font-size="12" font-weight="700">S</text>
+  <text x="8" y="108" fill="#e88c4a" font-size="12" font-weight="700">R</text>
+  <text x="8" y="148" fill="#4d9de0" font-size="12" font-weight="700">Q</text>
+  <!-- Timeline axis -->
+  <line x1="40" y1="172" x2="610" y2="172" stroke="#1e2a3a" stroke-width="1"/>
+  <!-- Time labels -->
+  <text x="85" y="183" fill="#556070" font-size="9">t1</text>
+  <text x="165" y="183" fill="#556070" font-size="9">t2</text>
+  <text x="245" y="183" fill="#556070" font-size="9">t3</text>
+  <text x="325" y="183" fill="#556070" font-size="9">t4</text>
+  <text x="405" y="183" fill="#556070" font-size="9">t5</text>
+  <text x="485" y="183" fill="#556070" font-size="9">t6</text>
+  <text x="560" y="183" fill="#556070" font-size="9">t7</text>
+  <!-- Vertical guides -->
+  <line x1="100" y1="10" x2="100" y2="172" stroke="#1e2a3a" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="180" y1="10" x2="180" y2="172" stroke="#1e2a3a" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="260" y1="10" x2="260" y2="172" stroke="#1e2a3a" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="340" y1="10" x2="340" y2="172" stroke="#1e2a3a" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="420" y1="10" x2="420" y2="172" stroke="#1e2a3a" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="500" y1="10" x2="500" y2="172" stroke="#1e2a3a" stroke-width="1" stroke-dasharray="3,3"/>
+  <line x1="570" y1="10" x2="570" y2="172" stroke="#1e2a3a" stroke-width="1" stroke-dasharray="3,3"/>
+  <!-- EN waveform: LOW, rises at t2, falls at t5, rises at t6 -->
+  <polyline points="40,35 180,35 180,15 420,15 420,35 500,35 500,15 610,15" fill="none" stroke="#3dd9c8" stroke-width="2.5"/>
+  <!-- S waveform: LOW, HIGH at t1, LOW at t3, HIGH at t6, LOW at t7 -->
+  <polyline points="40,75 100,75 100,55 260,55 260,75 500,75 500,55 570,55 570,75 610,75" fill="none" stroke="#4ec94e" stroke-width="2.5"/>
+  <!-- R waveform: LOW, HIGH at t3, LOW at t4, HIGH at t7 -->
+  <polyline points="40,115 260,115 260,95 340,95 340,115 570,115 570,95 610,95" fill="none" stroke="#e88c4a" stroke-width="2.5"/>
+  <!-- Q waveform: starts LOW; EN=1 at t2 + S was already high → Q goes HIGH at t2; R goes high at t3 but still EN → Q goes LOW; EN off at t5 → hold; EN on at t6, S=1 → Q goes HIGH -->
+  <polyline points="40,155 180,155 180,135 260,135 260,155 420,155 420,155 500,155 500,135 610,135" fill="none" stroke="#4d9de0" stroke-width="3"/>
+  <!-- Annotations -->
+  <text x="185" y="122" fill="#3dd9c8" font-size="9">EN↑ S=1→Q=1</text>
+  <text x="263" y="130" fill="#e88c4a" font-size="9">R=1→Q=0</text>
+  <text x="342" y="130" fill="#7a8fa8" font-size="9">R=0→hold</text>
+  <text x="422" y="148" fill="#3dd9c8" font-size="9">EN=0→hold</text>
+  <text x="502" y="122" fill="#3dd9c8" font-size="9">EN↑ S=1→Q=1</text>
+  <!-- Level indicators -->
+  <text x="42" y="22" fill="#3dd9c8" font-size="8">0</text>
+  <text x="42" y="62" fill="#4ec94e" font-size="8">0</text>
+  <text x="42" y="102" fill="#e88c4a" font-size="8">0</text>
+  <text x="42" y="142" fill="#4d9de0" font-size="8">0</text>
+</svg>
+<div class="diag-lbl">Timing Diagram — SR Latch with Enable; Q responds only when EN=1</div>
+</div>
+</div>
+
+</div><!-- /L18 -->
+
+
+<!-- ═══════════════════════════════ LECTURE 19 ═══════════════════════════════ -->
+<div class="lec" id="l19">
+<div class="lec-hdr">
+  <span class="lec-num">LECTURE 19</span>
+  <h2 class="lec-title">Introduction to Flip-Flops &amp; The D Flip-Flop</h2>
+</div>
+
+<!-- 1. Problem with Latches -->
+<div class="card">
+<div class="card-title">1. The Problem with Latches — Why Flip-Flops are Needed</div>
+<div class="g2">
+<div>
+<div class="def"><strong>Transparency Problem:</strong> A latch is <em>transparent</em> — while EN=1, output Q follows input D continuously. Any glitch or noise on input gets passed to output.</div>
+<ul class="n">
+  <li>If EN is HIGH for a long time, multiple state changes possible</li>
+  <li>In digital systems, we want exactly ONE state change per clock cycle</li>
+  <li>Solution: <strong>Edge-triggered flip-flop</strong> — captures input ONLY at the clock edge (transition moment)</li>
+  <li>Edge is instantaneous — practically no window for multiple changes</li>
+</ul>
+</div>
+<div>
+<div class="diag">
+<svg width="280" height="160" viewBox="0 0 280 160">
+  <!-- Labels -->
+  <text x="5" y="25" fill="#56d8e4" font-size="11" font-weight="700">CLK</text>
+  <text x="5" y="60" fill="#4ec94e" font-size="11" font-weight="700">D</text>
+  <text x="5" y="95" fill="#e88c4a" font-size="11">Q(latch)</text>
+  <text x="5" y="130" fill="#4d9de0" font-size="11">Q(FF)</text>
+  <!-- CLK -->
+  <polyline points="40,30 40,10 100,10 100,30 160,30 160,10 220,10 220,30 280,30" fill="none" stroke="#3dd9c8" stroke-width="2"/>
+  <!-- D - glitchy -->
+  <polyline points="40,65 70,65 70,48 90,48 90,65 130,65 130,48 155,48 155,65 180,65 180,48 210,48 210,65 280,65" fill="none" stroke="#4ec94e" stroke-width="2"/>
+  <!-- Q latch - follows D while CLK=1 (glitchy) -->
+  <polyline points="40,100 70,100 70,83 90,83 90,100 100,100 100,83 130,83 130,100 155,100 155,83 160,100 160,83 180,83 180,100 210,100 210,83 220,100 220,100 280,100" fill="none" stroke="#e88c4a" stroke-width="2"/>
+  <!-- Q FF - captures only on rising edge -->
+  <polyline points="40,135 100,135 100,118 160,135 160,118 220,118 280,118" fill="none" stroke="#4d9de0" stroke-width="2.5"/>
+  <!-- annotation -->
+  <text x="60" y="148" fill="#e88c4a" font-size="8">latch: multiple changes</text>
+  <text x="115" y="148" fill="#4d9de0" font-size="8">FF: one change/edge</text>
+</svg>
+<div class="diag-lbl">Latch vs Flip-Flop — Transparency Problem</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 2. Level vs Edge Triggered -->
+<div class="card">
+<div class="card-title">2. Level-Triggered vs Edge-Triggered</div>
+<div class="g2">
+<div>
+<div class="sub">Level-Triggered (Latch)</div>
+<ul class="n">
+  <li>Active whenever enable level is HIGH (or LOW for active-low)</li>
+  <li>Transparent during the entire enable period</li>
+  <li>Positive level-triggered: active while CLK=1</li>
+  <li>Negative level-triggered: active while CLK=0</li>
+</ul>
+</div>
+<div>
+<div class="sub">Edge-Triggered (Flip-Flop)</div>
+<ul class="n">
+  <li>Active only at the clock transition (edge)</li>
+  <li>Positive edge-triggered (↑): samples at 0→1 transition</li>
+  <li>Negative edge-triggered (↓): samples at 1→0 transition</li>
+  <li>Negative edge shown by bubble (∘) on clock input</li>
+</ul>
+</div>
+</div>
+<div class="diag">
+<svg width="560" height="110" viewBox="0 0 560 110">
+  <!-- CLK label -->
+  <text x="5" y="30" fill="#3dd9c8" font-size="11">CLK</text>
+  <!-- CLK waveform -->
+  <polyline points="35,35 35,15 110,15 110,35 185,35 185,15 260,15 260,35 335,35 335,15 410,15 410,35 485,35 485,15 555,15 555,35" fill="none" stroke="#3dd9c8" stroke-width="2"/>
+  <!-- Level trigger region (shaded) -->
+  <rect x="35" y="15" width="75" height="20" fill="rgba(232,138,74,0.15)"/>
+  <rect x="185" y="15" width="75" height="20" fill="rgba(232,138,74,0.15)"/>
+  <rect x="335" y="15" width="75" height="20" fill="rgba(232,138,74,0.15)"/>
+  <text x="55" y="30" fill="#e88c4a" font-size="8">level active</text>
+  <!-- Rising edge markers -->
+  <line x1="185" y1="10" x2="185" y2="42" stroke="#4d9de0" stroke-width="2.5"/>
+  <line x1="335" y1="10" x2="335" y2="42" stroke="#4d9de0" stroke-width="2.5"/>
+  <line x1="485" y1="10" x2="485" y2="42" stroke="#4d9de0" stroke-width="2.5"/>
+  <text x="180" y="55" fill="#4d9de0" font-size="8">↑ edge</text>
+  <text x="330" y="55" fill="#4d9de0" font-size="8">↑ edge</text>
+  <!-- Falling edge markers -->
+  <line x1="260" y1="10" x2="260" y2="42" stroke="#4ec94e" stroke-width="2" stroke-dasharray="4,2"/>
+  <line x1="410" y1="10" x2="410" y2="42" stroke="#4ec94e" stroke-width="2" stroke-dasharray="4,2"/>
+  <text x="255" y="70" fill="#4ec94e" font-size="8">↓ edge</text>
+  <text x="405" y="70" fill="#4ec94e" font-size="8">↓ edge</text>
+  <!-- Legend -->
+  <rect x="35" y="80" width="12" height="8" fill="rgba(232,138,74,0.3)"/>
+  <text x="52" y="88" fill="#e88c4a" font-size="9">Latch: active during HIGH level</text>
+  <line x1="230" y1="84" x2="250" y2="84" stroke="#4d9de0" stroke-width="2"/>
+  <text x="253" y="88" fill="#4d9de0" font-size="9">FF: active only at ↑ edge</text>
+</svg>
+<div class="diag-lbl">Level-Triggered vs Edge-Triggered Timing</div>
+</div>
+</div>
+
+<!-- 3. D Latch -->
+<div class="card">
+<div class="card-title">3. D Latch — Gate-Level Implementation</div>
+<p>The D (Data) latch solves the SR forbidden state by connecting S̄ = D and R̄ = D̄. This ensures S and R are always complements.</p>
+<div class="g2">
+<div>
+<div class="diag">
+<svg width="380" height="200" viewBox="0 0 380 200">
+  <!-- NOT gate for D-bar -->
+  <polygon points="40,95 40,115 60,105" fill="#151c27" stroke="#b07bff" stroke-width="1.5"/>
+  <circle cx="63" cy="105" r="4" fill="#151c27" stroke="#b07bff" stroke-width="1.5"/>
+  <!-- AND gate top (S) -->
+  <line x1="90" y1="30" x2="90" y2="55" stroke="#4ec94e" stroke-width="1.5"/>
+  <path d="M 90,30 Q 118,30 118,42 Q 118,55 90,55" fill="#151c27" stroke="#4ec94e" stroke-width="1.5"/>
+  <!-- AND gate bottom (R) -->
+  <line x1="90" y1="145" x2="90" y2="170" stroke="#e88c4a" stroke-width="1.5"/>
+  <path d="M 90,145 Q 118,145 118,157 Q 118,170 90,170" fill="#151c27" stroke="#e88c4a" stroke-width="1.5"/>
+  <!-- D input line -->
+  <line x1="10" y1="40" x2="90" y2="40" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="2" y="44" fill="#4ec94e" font-size="12" font-weight="700">D</text>
+  <!-- D to NOT -->
+  <line x1="25" y1="40" x2="25" y2="105" stroke="#4ec94e" stroke-width="1.5"/>
+  <line x1="25" y1="105" x2="40" y2="105" stroke="#b07bff" stroke-width="1.5"/>
+  <!-- D-bar to AND gate 2 -->
+  <line x1="67" y1="105" x2="80" y2="105" stroke="#b07bff" stroke-width="1.5"/>
+  <line x1="80" y1="105" x2="80" y2="157" stroke="#b07bff" stroke-width="1.5"/>
+  <line x1="80" y1="157" x2="90" y2="157" stroke="#b07bff" stroke-width="1.5"/>
+  <!-- EN to both ANDs -->
+  <line x1="10" y1="155" x2="10" y2="48" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="10" y1="48" x2="90" y2="48" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="10" y1="155" x2="90" y2="155" stroke="#3dd9c8" stroke-width="1.5"/>
+  <text x="2" y="108" fill="#3dd9c8" font-size="9">EN</text>
+  <!-- AND outputs to NAND latch -->
+  <line x1="118" y1="42" x2="160" y2="42" stroke="#4ec94e" stroke-width="1.5"/>
+  <line x1="118" y1="157" x2="160" y2="157" stroke="#e88c4a" stroke-width="1.5"/>
+  <!-- NAND latch simplified block -->
+  <rect x="160" y="18" width="80" height="164" rx="7" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <text x="200" y="98" fill="#4d9de0" font-size="11" text-anchor="middle">NAND</text>
+  <text x="200" y="112" fill="#4d9de0" font-size="11" text-anchor="middle">Latch</text>
+  <text x="163" y="48" fill="#4ec94e" font-size="9">S</text>
+  <text x="163" y="163" fill="#e88c4a" font-size="9">R</text>
+  <!-- Outputs -->
+  <line x1="240" y1="60" x2="370" y2="60" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="373" y="64" fill="#4ec94e" font-size="13" font-weight="700">Q</text>
+  <line x1="240" y1="140" x2="370" y2="140" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="372" y="144" fill="#e88c4a" font-size="13" font-weight="700">Q̄</text>
+  <!-- D-bar label -->
+  <text x="67" y="100" fill="#b07bff" font-size="9">D̄</text>
+  <circle cx="25" cy="40" r="3" fill="#4ec94e"/>
+</svg>
+<div class="diag-lbl">D Latch — NOT gate ensures S=D, R=D̄ (no forbidden state)</div>
+</div>
+</div>
+<div>
+<div class="sub">D Latch Truth Table</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>EN</th><th>D</th><th>Q(t+1)</th><th>Q̄(t+1)</th><th>Action</th></tr>
+<tr class="tr-hld"><td>0</td><td>X</td><td>Q</td><td>Q̄</td><td>Hold (latch closed)</td></tr>
+<tr class="tr-rst"><td>1</td><td>0</td><td>0</td><td>1</td><td>Reset (Q follows D=0)</td></tr>
+<tr class="tr-set"><td>1</td><td>1</td><td>1</td><td>0</td><td>Set (Q follows D=1)</td></tr>
+</table>
+</div>
+<div class="eq">Q(t+1) = D when EN=1 (transparent)</div>
+<div class="key"><strong>No Forbidden State:</strong> S and R are always complements (S=D, R=D̄), so S·R = D·D̄ = 0 always. The forbidden condition can never occur.</div>
+<div class="sub">D Latch Symbol</div>
+<div class="diag">
+<svg width="180" height="100" viewBox="0 0 180 100">
+  <rect x="50" y="10" width="80" height="70" rx="6" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <text x="90" y="48" fill="#4d9de0" font-size="14" text-anchor="middle" font-weight="700">D</text>
+  <text x="90" y="64" fill="#7a8fa8" font-size="10" text-anchor="middle">Latch</text>
+  <line x1="10" y1="35" x2="50" y2="35" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="5" y="39" fill="#4ec94e" font-size="12">D</text>
+  <line x1="10" y1="65" x2="50" y2="65" stroke="#3dd9c8" stroke-width="1.5"/>
+  <text x="3" y="69" fill="#3dd9c8" font-size="10">EN</text>
+  <line x1="130" y1="40" x2="170" y2="40" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="173" y="44" fill="#4ec94e" font-size="12">Q</text>
+  <line x1="130" y1="60" x2="170" y2="60" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="172" y="64" fill="#e88c4a" font-size="12">Q̄</text>
+</svg>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 4. D Flip-Flop -->
+<div class="card">
+<div class="card-title">4. D Flip-Flop — Edge-Triggered Implementation</div>
+<p>A <strong>positive edge-triggered D flip-flop</strong> is built from two D latches in master-slave configuration. The master latch is transparent when CLK=0; the slave is transparent when CLK=1.</p>
+<div class="g2">
+<div>
+<div class="diag">
+<svg width="400" height="160" viewBox="0 0 400 160">
+  <!-- Master latch -->
+  <rect x="40" y="30" width="110" height="90" rx="7" fill="#151c27" stroke="#4ec94e" stroke-width="1.8"/>
+  <text x="95" y="73" fill="#4ec94e" font-size="12" text-anchor="middle" font-weight="700">MASTER</text>
+  <text x="95" y="88" fill="#7a8fa8" font-size="10" text-anchor="middle">D-Latch</text>
+  <text x="95" y="102" fill="#3dd9c8" font-size="9" text-anchor="middle">EN= CLK̄</text>
+  <!-- CLK NOT -->
+  <polygon points="165,60 165,75 180,67" fill="#151c27" stroke="#3dd9c8" stroke-width="1.5"/>
+  <circle cx="183" cy="67" r="4" fill="#151c27" stroke="#3dd9c8" stroke-width="1.5"/>
+  <!-- Slave latch -->
+  <rect x="240" y="30" width="110" height="90" rx="7" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <text x="295" y="73" fill="#4d9de0" font-size="12" text-anchor="middle" font-weight="700">SLAVE</text>
+  <text x="295" y="88" fill="#7a8fa8" font-size="10" text-anchor="middle">D-Latch</text>
+  <text x="295" y="102" fill="#3dd9c8" font-size="9" text-anchor="middle">EN=CLK</text>
+  <!-- D input -->
+  <line x1="5" y1="60" x2="40" y2="60" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="2" y="64" fill="#4ec94e" font-size="12">D</text>
+  <!-- Master → Slave connection -->
+  <line x1="150" y1="60" x2="240" y2="60" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="185" y="55" fill="#e88c4a" font-size="9">internal Q</text>
+  <!-- CLK input -->
+  <line x1="5" y1="110" x2="165" y2="110" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="187" y1="67" x2="220" y2="67" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="220" y1="67" x2="220" y2="110" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="220" y1="110" x2="295" y2="110" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="165" y1="110" x2="165" y2="67" stroke="#3dd9c8" stroke-width="1.5"/>
+  <text x="2" y="113" fill="#3dd9c8" font-size="11">CLK</text>
+  <!-- Clock triangle in slave -->
+  <polygon points="240,103 240,117 252,110" fill="#3dd9c8"/>
+  <!-- Output Q -->
+  <line x1="350" y1="60" x2="390" y2="60" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="392" y="64" fill="#4ec94e" font-size="13" font-weight="700">Q</text>
+  <line x1="350" y1="90" x2="390" y2="90" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="391" y="94" fill="#e88c4a" font-size="13" font-weight="700">Q̄</text>
+  <!-- Annotations -->
+  <text x="40" y="140" fill="#4ec94e" font-size="9">Active when CLK=0 (captures D)</text>
+  <text x="240" y="140" fill="#4d9de0" font-size="9">Active when CLK=1 (outputs to Q)</text>
+</svg>
+<div class="diag-lbl">Master-Slave D Flip-Flop — Captures on Rising Edge (CLK 0→1)</div>
+</div>
+</div>
+<div>
+<div class="sub">D FF Symbol</div>
+<div class="diag">
+<svg width="200" height="120" viewBox="0 0 200 120">
+  <rect x="55" y="10" width="95" height="100" rx="8" fill="#151c27" stroke="#4d9de0" stroke-width="2"/>
+  <text x="102" y="60" fill="#4d9de0" font-size="16" text-anchor="middle" font-weight="700">D</text>
+  <text x="102" y="78" fill="#4d9de0" font-size="12" text-anchor="middle">FF</text>
+  <line x1="10" y1="45" x2="55" y2="45" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="5" y="49" fill="#4ec94e" font-size="12">D</text>
+  <line x1="10" y1="90" x2="55" y2="90" stroke="#3dd9c8" stroke-width="1.5"/>
+  <!-- Rising edge triangle -->
+  <polygon points="55,82 55,98 68,90" fill="#3dd9c8"/>
+  <text x="4" y="94" fill="#3dd9c8" font-size="10">CLK</text>
+  <line x1="150" y1="50" x2="190" y2="50" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="192" y="54" fill="#4ec94e" font-size="12">Q</text>
+  <line x1="150" y1="75" x2="190" y2="75" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="191" y="79" fill="#e88c4a" font-size="12">Q̄</text>
+</svg>
+<div class="diag-lbl">D FF Symbol (↑ = Positive Edge Triggered)</div>
+</div>
+<div class="sub">Characteristic Table</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>D</th><th>Q(t)</th><th>Q(t+1)</th><th>Action</th></tr>
+<tr class="tr-rst"><td>0</td><td>0</td><td>0</td><td>Hold 0</td></tr>
+<tr class="tr-set"><td>0</td><td>1</td><td>0</td><td>Reset</td></tr>
+<tr class="tr-rst"><td>1</td><td>0</td><td>1</td><td>Set</td></tr>
+<tr class="tr-set"><td>1</td><td>1</td><td>1</td><td>Hold 1</td></tr>
+</table>
+</div>
+<div class="eq">Q(t+1) = D</div>
+</div>
+</div>
+<!-- D FF Timing -->
+<div class="sub">D Flip-Flop Timing Diagram</div>
+<div class="diag">
+<svg width="600" height="130" viewBox="0 0 600 130">
+  <text x="5" y="22" fill="#3dd9c8" font-size="11">CLK</text>
+  <text x="5" y="57" fill="#4ec94e" font-size="11">D</text>
+  <text x="5" y="92" fill="#4d9de0" font-size="11">Q</text>
+  <!-- CLK squares -->
+  <polyline points="35,28 35,8 95,8 95,28 155,28 155,8 215,8 215,28 275,28 275,8 335,8 335,28 395,28 395,8 455,8 455,28 515,28 515,8 575,8 575,28" fill="none" stroke="#3dd9c8" stroke-width="2"/>
+  <!-- D waveform — changes mid-cycle sometimes -->
+  <polyline points="35,62 75,62 75,42 175,42 175,62 235,62 235,42 315,42 315,62 355,62 355,42 430,42 430,62 475,62 475,42 575,42" fill="none" stroke="#4ec94e" stroke-width="2"/>
+  <!-- Q follows D only at rising CLK edge -->
+  <polyline points="35,97 95,97 95,77 155,97 155,77 215,77 215,77 275,97 275,77 335,77 395,97 395,62 455,62 515,42 575,42" fill="none" stroke="#4d9de0" stroke-width="3"/>
+  <!-- Rising edge markers -->
+  <line x1="95" y1="5" x2="95" y2="105" stroke="#e8c84a" stroke-width="1" stroke-dasharray="2,3"/>
+  <line x1="155" y1="5" x2="155" y2="105" stroke="#e8c84a" stroke-width="1" stroke-dasharray="2,3"/>
+  <line x1="215" y1="5" x2="215" y2="105" stroke="#e8c84a" stroke-width="1" stroke-dasharray="2,3"/>
+  <line x1="275" y1="5" x2="275" y2="105" stroke="#e8c84a" stroke-width="1" stroke-dasharray="2,3"/>
+  <line x1="335" y1="5" x2="335" y2="105" stroke="#e8c84a" stroke-width="1" stroke-dasharray="2,3"/>
+  <line x1="395" y1="5" x2="395" y2="105" stroke="#e8c84a" stroke-width="1" stroke-dasharray="2,3"/>
+  <line x1="455" y1="5" x2="455" y2="105" stroke="#e8c84a" stroke-width="1" stroke-dasharray="2,3"/>
+  <line x1="515" y1="5" x2="515" y2="105" stroke="#e8c84a" stroke-width="1" stroke-dasharray="2,3"/>
+  <text x="88" y="115" fill="#e8c84a" font-size="8">↑</text>
+  <text x="148" y="115" fill="#e8c84a" font-size="8">↑</text>
+  <text x="208" y="115" fill="#e8c84a" font-size="8">↑</text>
+  <text x="268" y="115" fill="#e8c84a" font-size="8">↑</text>
+  <text x="328" y="115" fill="#e8c84a" font-size="8">↑</text>
+  <text x="388" y="115" fill="#e8c84a" font-size="8">↑</text>
+  <text x="448" y="115" fill="#e8c84a" font-size="8">↑</text>
+  <text x="508" y="115" fill="#e8c84a" font-size="8">↑</text>
+  <text x="100" y="88" fill="#7a8fa8" font-size="8">Q captures D at each ↑ edge</text>
+</svg>
+<div class="diag-lbl">D FF Timing — Q updates only at rising clock edge regardless of D changes between edges</div>
+</div>
+<div class="warn"><strong>Setup and Hold Time:</strong> D must be stable for t_setup <em>before</em> the clock edge and t_hold <em>after</em> the clock edge. Violating these causes metastability (output goes to unpredictable state).</div>
+</div>
+
+</div><!-- /L19 -->
+
+<!-- ═══════════════════════════════ LECTURE 20 ═══════════════════════════════ -->
+<div class="lec" id="l20">
+<div class="lec-hdr">
+  <span class="lec-num">LECTURE 20</span>
+  <h2 class="lec-title">Types of Flip-Flops: JK, T — Characteristic &amp; Excitation Tables</h2>
+</div>
+
+<!-- 1. All FF Types Overview -->
+<div class="card">
+<div class="card-title">1. Four Types of Flip-Flops — Overview</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>FF Type</th><th>Inputs</th><th>Characteristic Equation</th><th>Key Feature</th></tr>
+<tr><td style="color:#4ec94e">D</td><td>D</td><td style="color:#e8c84a">Q(t+1) = D</td><td>Q simply stores D; no forbidden state</td></tr>
+<tr><td style="color:#e88c4a">SR</td><td>S, R</td><td style="color:#e8c84a">Q(t+1) = S + R̄·Q</td><td>Set/Reset; forbidden when S=R=1</td></tr>
+<tr><td style="color:#b07bff">JK</td><td>J, K</td><td style="color:#e8c84a">Q(t+1) = J·Q̄ + K̄·Q</td><td>Universal; J=K=1 = Toggle (no forbidden)</td></tr>
+<tr><td style="color:#3dd9c8">T</td><td>T</td><td style="color:#e8c84a">Q(t+1) = T ⊕ Q</td><td>Toggle when T=1; hold when T=0</td></tr>
+</table>
+</div>
+</div>
+
+<!-- 2. JK FF -->
+<div class="card">
+<div class="card-title">2. JK Flip-Flop — The Universal Flip-Flop</div>
+<div class="def">JK eliminates the forbidden state of SR by making J=K=1 a <strong>toggle</strong> condition (Q flips to complement). J=Set, K=Reset.</div>
+<div class="g2">
+<div>
+<div class="sub">Gate-Level Circuit (NAND Implementation)</div>
+<div class="diag">
+<svg width="380" height="220" viewBox="0 0 380 220">
+  <!-- This shows a basic NAND-based JK FF -->
+  <!-- Upper NAND (S path) -->
+  <line x1="80" y1="25" x2="80" y2="55" stroke="#4ec94e" stroke-width="1.5"/>
+  <path d="M 80,25 Q 112,25 112,40 Q 112,55 80,55" fill="#151c27" stroke="#4ec94e" stroke-width="1.5"/>
+  <circle cx="116" cy="40" r="4" fill="#151c27" stroke="#4ec94e" stroke-width="1.5"/>
+  <!-- Lower NAND (R path) -->
+  <line x1="80" y1="155" x2="80" y2="185" stroke="#e88c4a" stroke-width="1.5"/>
+  <path d="M 80,155 Q 112,155 112,170 Q 112,185 80,185" fill="#151c27" stroke="#e88c4a" stroke-width="1.5"/>
+  <circle cx="116" cy="170" r="4" fill="#151c27" stroke="#e88c4a" stroke-width="1.5"/>
+  <!-- SR NAND latch (right side) -->
+  <!-- NAND 3 -->
+  <line x1="195" y1="40" x2="195" y2="95" stroke="#4d9de0" stroke-width="1.5"/>
+  <path d="M 195,40 Q 228,40 228,67 Q 228,95 195,95" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <circle cx="232" cy="67" r="4" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <!-- NAND 4 -->
+  <line x1="195" y1="120" x2="195" y2="175" stroke="#4d9de0" stroke-width="1.5"/>
+  <path d="M 195,120 Q 228,120 228,147 Q 228,175 195,175" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <circle cx="232" cy="147" r="4" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <!-- NAND labels -->
+  <text x="98" y="37" fill="#4ec94e" font-size="8">NAND A</text>
+  <text x="98" y="168" fill="#e88c4a" font-size="8">NAND B</text>
+  <text x="205" y="64" fill="#4d9de0" font-size="8">NAND C</text>
+  <text x="205" y="144" fill="#4d9de0" font-size="8">NAND D</text>
+  <!-- J input (3 inputs to NAND A) -->
+  <line x1="10" y1="32" x2="80" y2="32" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="2" y="36" fill="#4ec94e" font-size="12" font-weight="700">J</text>
+  <!-- K input -->
+  <line x1="10" y1="178" x2="80" y2="178" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="2" y="182" fill="#e88c4a" font-size="12" font-weight="700">K</text>
+  <!-- CLK to both input NANDs -->
+  <line x1="10" y1="105" x2="55" y2="105" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="55" y1="105" x2="55" y2="46" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="55" y1="46" x2="80" y2="46" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="55" y1="105" x2="55" y2="168" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="55" y1="168" x2="80" y2="168" stroke="#3dd9c8" stroke-width="1.5"/>
+  <circle cx="55" cy="105" r="3" fill="#3dd9c8"/>
+  <text x="2" y="108" fill="#3dd9c8" font-size="9">CLK</text>
+  <!-- NAND A output to NAND C -->
+  <line x1="120" y1="40" x2="165" y2="40" stroke="#4ec94e" stroke-width="1.5"/>
+  <line x1="165" y1="40" x2="165" y2="55" stroke="#4ec94e" stroke-width="1.5"/>
+  <line x1="165" y1="55" x2="195" y2="55" stroke="#4ec94e" stroke-width="1.5"/>
+  <!-- NAND B output to NAND D -->
+  <line x1="120" y1="170" x2="170" y2="170" stroke="#e88c4a" stroke-width="1.5"/>
+  <line x1="170" y1="170" x2="170" y2="158" stroke="#e88c4a" stroke-width="1.5"/>
+  <line x1="170" y1="158" x2="195" y2="158" stroke="#e88c4a" stroke-width="1.5"/>
+  <!-- Q output (NAND C) -->
+  <line x1="236" y1="67" x2="370" y2="67" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="373" y="71" fill="#4ec94e" font-size="13" font-weight="700">Q</text>
+  <!-- Q-bar output (NAND D) -->
+  <line x1="236" y1="147" x2="370" y2="147" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="372" y="151" fill="#e88c4a" font-size="13" font-weight="700">Q̄</text>
+  <!-- Feedback: Q → NAND B input 3 -->
+  <line x1="300" y1="67" x2="300" y2="110" stroke="#3dd9c8" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <line x1="300" y1="110" x2="62" y2="110" stroke="#3dd9c8" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <line x1="62" y1="110" x2="62" y2="162" stroke="#3dd9c8" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <line x1="62" y1="162" x2="80" y2="162" stroke="#3dd9c8" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <!-- Feedback: Q-bar → NAND A input 3 -->
+  <line x1="290" y1="147" x2="290" y2="105" stroke="#e85a4a" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <line x1="290" y1="105" x2="57" y2="105" stroke="#e85a4a" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <line x1="57" y1="105" x2="57" y2="52" stroke="#e85a4a" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <line x1="57" y1="52" x2="80" y2="52" stroke="#e85a4a" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <circle cx="300" cy="67" r="3" fill="#3dd9c8"/>
+  <circle cx="290" cy="147" r="3" fill="#e85a4a"/>
+  <!-- NAND C connect to NAND D -->
+  <line x1="195" y1="80" x2="180" y2="80" stroke="#b07bff" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <line x1="180" y1="80" x2="180" y2="135" stroke="#b07bff" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <line x1="180" y1="135" x2="195" y2="135" stroke="#b07bff" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <line x1="195" y1="170" x2="178" y2="170" stroke="#b07bff" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <line x1="178" y1="170" x2="178" y2="82" stroke="#b07bff" stroke-width="1.2" stroke-dasharray="3,2"/>
+</svg>
+<div class="diag-lbl">JK FF Gate Level — NAND Gates with Feedback</div>
+</div>
+</div>
+<div>
+<div class="sub">JK FF Truth Table</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>J</th><th>K</th><th>Q(t)</th><th>Q(t+1)</th><th>Operation</th></tr>
+<tr class="tr-hld"><td>0</td><td>0</td><td>0</td><td>0</td><td>Hold (No Change)</td></tr>
+<tr class="tr-hld"><td>0</td><td>0</td><td>1</td><td>1</td><td>Hold (No Change)</td></tr>
+<tr class="tr-rst"><td>0</td><td>1</td><td>0</td><td>0</td><td>Reset</td></tr>
+<tr class="tr-rst"><td>0</td><td>1</td><td>1</td><td>0</td><td>Reset</td></tr>
+<tr class="tr-set"><td>1</td><td>0</td><td>0</td><td>1</td><td>Set</td></tr>
+<tr class="tr-set"><td>1</td><td>0</td><td>1</td><td>1</td><td>Set</td></tr>
+<tr class="tr-tog"><td>1</td><td>1</td><td>0</td><td>1</td><td>Toggle ←unique!</td></tr>
+<tr class="tr-tog"><td>1</td><td>1</td><td>1</td><td>0</td><td>Toggle ←unique!</td></tr>
+</table>
+</div>
+<div class="eq">Q(t+1) = J·Q̄ + K̄·Q</div>
+<div class="key"><strong>No Forbidden State!</strong> J=K=1 is well-defined: it toggles Q. This makes JK the most flexible flip-flop — it can be used as D FF (K=J̄) or T FF (J=K=T).</div>
+<div class="sub">JK FF Symbol</div>
+<div class="diag">
+<svg width="190" height="125" viewBox="0 0 190 125">
+  <rect x="55" y="10" width="90" height="105" rx="8" fill="#151c27" stroke="#b07bff" stroke-width="2"/>
+  <text x="100" y="65" fill="#b07bff" font-size="16" text-anchor="middle" font-weight="700">JK</text>
+  <line x1="10" y1="38" x2="55" y2="38" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="5" y="42" fill="#4ec94e" font-size="13">J</text>
+  <line x1="10" y1="85" x2="55" y2="85" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="5" y="89" fill="#e88c4a" font-size="13">K</text>
+  <line x1="10" y1="113" x2="55" y2="113" stroke="#3dd9c8" stroke-width="1.5"/>
+  <polygon points="55,105 55,121 68,113" fill="#3dd9c8"/>
+  <text x="4" y="116" fill="#3dd9c8" font-size="10">CLK</text>
+  <line x1="145" y1="45" x2="185" y2="45" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="188" y="49" fill="#4ec94e" font-size="13">Q</text>
+  <line x1="145" y1="78" x2="185" y2="78" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="187" y="82" fill="#e88c4a" font-size="13">Q̄</text>
+</svg>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 3. T Flip-Flop -->
+<div class="card">
+<div class="card-title">3. T (Toggle) Flip-Flop</div>
+<div class="def">The T flip-flop has one input T. When T=1, the output <strong>toggles</strong> on every clock edge. When T=0, output holds. It is derived from the JK FF by connecting J=K=T.</div>
+<div class="g2">
+<div>
+<div class="diag">
+<svg width="300" height="120" viewBox="0 0 300 120">
+  <!-- JK FF box -->
+  <rect x="60" y="15" width="110" height="95" rx="8" fill="#151c27" stroke="#3dd9c8" stroke-width="1.8"/>
+  <text x="115" y="62" fill="#3dd9c8" font-size="12" text-anchor="middle">JK FF</text>
+  <!-- T input splits to J and K -->
+  <line x1="10" y1="55" x2="45" y2="55" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="3" y="59" fill="#4ec94e" font-size="13" font-weight="700">T</text>
+  <line x1="45" y1="55" x2="45" y2="40" stroke="#4ec94e" stroke-width="1.5"/>
+  <line x1="45" y1="40" x2="60" y2="40" stroke="#4ec94e" stroke-width="1.5"/>
+  <line x1="45" y1="55" x2="45" y2="80" stroke="#4ec94e" stroke-width="1.5"/>
+  <line x1="45" y1="80" x2="60" y2="80" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="62" y="44" fill="#4ec94e" font-size="9">J=T</text>
+  <text x="62" y="84" fill="#4ec94e" font-size="9">K=T</text>
+  <circle cx="45" cy="55" r="3" fill="#4ec94e"/>
+  <!-- CLK -->
+  <line x1="10" y1="107" x2="60" y2="107" stroke="#3dd9c8" stroke-width="1.5"/>
+  <polygon points="60,99 60,115 73,107" fill="#3dd9c8"/>
+  <text x="3" y="110" fill="#3dd9c8" font-size="10">CLK</text>
+  <!-- Q out -->
+  <line x1="170" y1="50" x2="240" y2="50" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="243" y="54" fill="#4ec94e" font-size="13" font-weight="700">Q</text>
+  <line x1="170" y1="78" x2="240" y2="78" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="242" y="82" fill="#e88c4a" font-size="13" font-weight="700">Q̄</text>
+  <!-- Annotation -->
+  <text x="25" y="35" fill="#7a8fa8" font-size="8">T→J and T→K</text>
+</svg>
+<div class="diag-lbl">T FF Built from JK FF by Connecting J=K=T</div>
+</div>
+<div class="sub">T FF Timing</div>
+<div class="diag">
+<svg width="300" height="100" viewBox="0 0 300 100">
+  <text x="5" y="22" fill="#3dd9c8" font-size="10">CLK</text>
+  <text x="5" y="55" fill="#4ec94e" font-size="10">T</text>
+  <text x="5" y="88" fill="#b07bff" font-size="10">Q</text>
+  <!-- CLK -->
+  <polyline points="30,28 30,10 70,10 70,28 110,28 110,10 150,10 150,28 190,28 190,10 230,10 230,28 270,28 270,10" fill="none" stroke="#3dd9c8" stroke-width="2"/>
+  <!-- T: HIGH from t2 to t4, LOW otherwise -->
+  <polyline points="30,60 70,60 70,42 190,42 190,60 290,60" fill="none" stroke="#4ec94e" stroke-width="2"/>
+  <!-- Q: LOW, stays LOW first edge(T=0), toggles each edge while T=1 -->
+  <polyline points="30,93 70,93 70,73 110,73 110,93 150,93 150,73 190,73 190,93 230,93 290,93" fill="none" stroke="#b07bff" stroke-width="2.5"/>
+  <line x1="70" y1="5" x2="70" y2="95" stroke="#e8c84a" stroke-width="1" stroke-dasharray="2,3"/>
+  <line x1="110" y1="5" x2="110" y2="95" stroke="#e8c84a" stroke-width="1" stroke-dasharray="2,3"/>
+  <line x1="150" y1="5" x2="150" y2="95" stroke="#e8c84a" stroke-width="1" stroke-dasharray="2,3"/>
+  <line x1="190" y1="5" x2="190" y2="95" stroke="#e8c84a" stroke-width="1" stroke-dasharray="2,3"/>
+  <line x1="230" y1="5" x2="230" y2="95" stroke="#e8c84a" stroke-width="1" stroke-dasharray="2,3"/>
+  <text x="72" y="98" fill="#b07bff" font-size="8">toggle</text>
+  <text x="112" y="98" fill="#b07bff" font-size="8">toggle</text>
+  <text x="152" y="98" fill="#b07bff" font-size="8">toggle</text>
+  <text x="195" y="98" fill="#7a8fa8" font-size="8">hold</text>
+</svg>
+<div class="diag-lbl">T=1 → toggles; T=0 → holds</div>
+</div>
+</div>
+<div>
+<div class="sub">T FF Truth Table</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>T</th><th>Q(t)</th><th>Q(t+1)</th><th>Operation</th></tr>
+<tr class="tr-hld"><td>0</td><td>0</td><td>0</td><td>Hold</td></tr>
+<tr class="tr-hld"><td>0</td><td>1</td><td>1</td><td>Hold</td></tr>
+<tr class="tr-tog"><td>1</td><td>0</td><td>1</td><td>Toggle</td></tr>
+<tr class="tr-tog"><td>1</td><td>1</td><td>0</td><td>Toggle</td></tr>
+</table>
+</div>
+<div class="eq">Q(t+1) = T ⊕ Q</div>
+<div class="key"><strong>T FF from JK:</strong> Connect J=K=T. When T=0: J=K=0 → Hold. When T=1: J=K=1 → Toggle.</div>
+<div class="key"><strong>T FF from D:</strong> Connect D = T⊕Q (add an XOR gate).</div>
+</div>
+</div>
+</div>
+
+<!-- 4. Characteristic Tables All -->
+<div class="card">
+<div class="card-title">4. Characteristic Tables — All Four Flip-Flops</div>
+<div class="g2">
+<div>
+<p><strong style="color:#4d9de0">D Flip-Flop</strong></p>
+<table><tr><th>D</th><th>Q(t+1)</th></tr>
+<tr class="tr-rst"><td>0</td><td>0</td></tr>
+<tr class="tr-set"><td>1</td><td>1</td></tr></table>
+<div class="eq">Q+ = D</div>
+<hr>
+<p><strong style="color:#e88c4a">SR Flip-Flop</strong></p>
+<table><tr><th>S</th><th>R</th><th>Q(t+1)</th></tr>
+<tr class="tr-hld"><td>0</td><td>0</td><td>Q(t)</td></tr>
+<tr class="tr-rst"><td>0</td><td>1</td><td>0</td></tr>
+<tr class="tr-set"><td>1</td><td>0</td><td>1</td></tr>
+<tr class="tr-bad"><td>1</td><td>1</td><td>X (forbidden)</td></tr></table>
+<div class="eq">Q+ = S + R̄Q &nbsp;(SR=0 required)</div>
+</div>
+<div>
+<p><strong style="color:#b07bff">JK Flip-Flop</strong></p>
+<table><tr><th>J</th><th>K</th><th>Q(t+1)</th></tr>
+<tr class="tr-hld"><td>0</td><td>0</td><td>Q(t)</td></tr>
+<tr class="tr-rst"><td>0</td><td>1</td><td>0</td></tr>
+<tr class="tr-set"><td>1</td><td>0</td><td>1</td></tr>
+<tr class="tr-tog"><td>1</td><td>1</td><td>Q̄(t) (toggle)</td></tr></table>
+<div class="eq">Q+ = JQ̄ + K̄Q</div>
+<hr>
+<p><strong style="color:#3dd9c8">T Flip-Flop</strong></p>
+<table><tr><th>T</th><th>Q(t+1)</th></tr>
+<tr class="tr-hld"><td>0</td><td>Q(t)</td></tr>
+<tr class="tr-tog"><td>1</td><td>Q̄(t)</td></tr></table>
+<div class="eq">Q+ = T⊕Q</div>
+</div>
+</div>
+</div>
+
+</div><!-- /L20 -->
+
+
+<!-- ═══════════════════════════════ LECTURE 21 ═══════════════════════════════ -->
+<div class="lec" id="l21">
+<div class="lec-hdr">
+  <span class="lec-num">LECTURE 21</span>
+  <h2 class="lec-title">Flip-Flops with Direct Inputs · Sequential Circuit Analysis</h2>
+</div>
+
+<!-- 1. Direct Inputs -->
+<div class="card">
+<div class="card-title">1. Direct (Asynchronous) Inputs: Preset (PRE) and Clear (CLR)</div>
+<div class="def"><strong>Direct inputs</strong> override the clock entirely — they act immediately regardless of the clock state. Also called <em>asynchronous</em> or <em>override</em> inputs.</div>
+<div class="g2">
+<div>
+<ul class="n">
+  <li><strong style="color:#4ec94e">Preset (PRE) / Set Direct (SD):</strong> Forces Q=1 immediately when active</li>
+  <li><strong style="color:#e85a4a">Clear (CLR) / Reset Direct (RD):</strong> Forces Q=0 immediately when active</li>
+  <li>Typically <strong>active-LOW</strong>: PRE=0 activates preset; CLR=0 activates clear</li>
+  <li>When inactive (HIGH), normal clocked operation resumes</li>
+  <li>Priority: Direct inputs > Clock > Normal inputs</li>
+  <li>Used for power-on initialization, system reset</li>
+</ul>
+<div class="warn"><strong>Never assert both PRE=0 and CLR=0 simultaneously!</strong> This is like the SR forbidden state — both Q and Q̄ would be forced HIGH. Final state unpredictable when both released.</div>
+</div>
+<div>
+<div class="diag">
+<svg width="220" height="180" viewBox="0 0 220 180">
+  <!-- FF box -->
+  <rect x="60" y="40" width="100" height="110" rx="8" fill="#151c27" stroke="#4d9de0" stroke-width="2"/>
+  <text x="110" y="93" fill="#4d9de0" font-size="13" text-anchor="middle" font-weight="700">JK</text>
+  <text x="110" y="110" fill="#7a8fa8" font-size="10" text-anchor="middle">Flip-Flop</text>
+  <!-- PRE at top (active low — bubble) -->
+  <line x1="110" y1="10" x2="110" y2="40" stroke="#4ec94e" stroke-width="1.5"/>
+  <circle cx="110" cy="40" r="5" fill="#151c27" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="115" y="22" fill="#4ec94e" font-size="11" font-weight="700">PRE</text>
+  <text x="113" y="33" fill="#4ec94e" font-size="8">(active LOW)</text>
+  <!-- CLR at bottom (active low — bubble) -->
+  <line x1="110" y1="150" x2="110" y2="170" stroke="#e85a4a" stroke-width="1.5"/>
+  <circle cx="110" cy="150" r="5" fill="#151c27" stroke="#e85a4a" stroke-width="1.5"/>
+  <text x="115" y="165" fill="#e85a4a" font-size="11" font-weight="700">CLR</text>
+  <text x="113" y="175" fill="#e85a4a" font-size="8">(active LOW)</text>
+  <!-- J K CLK inputs -->
+  <line x1="10" y1="65" x2="60" y2="65" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="4" y="69" fill="#4ec94e" font-size="12">J</text>
+  <line x1="10" y1="100" x2="60" y2="100" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="4" y="104" fill="#e88c4a" font-size="12">K</text>
+  <line x1="10" y1="135" x2="60" y2="135" stroke="#3dd9c8" stroke-width="1.5"/>
+  <polygon points="60,127 60,143 73,135" fill="#3dd9c8"/>
+  <text x="3" y="139" fill="#3dd9c8" font-size="10">CLK</text>
+  <!-- Q outputs -->
+  <line x1="160" y1="72" x2="210" y2="72" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="212" y="76" fill="#4ec94e" font-size="13" font-weight="700">Q</text>
+  <line x1="160" y1="100" x2="210" y2="100" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="211" y="104" fill="#e88c4a" font-size="13" font-weight="700">Q̄</text>
+</svg>
+<div class="diag-lbl">JK FF with Active-LOW PRE and CLR</div>
+</div>
+</div>
+</div>
+<div class="sub">Direct Input Operation Table</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>PRE</th><th>CLR</th><th>CLK</th><th>J</th><th>K</th><th>Q</th><th>Q̄</th><th>Operation</th></tr>
+<tr class="tr-set"><td>0</td><td>1</td><td>X</td><td>X</td><td>X</td><td>1</td><td>0</td><td>Preset (async Set)</td></tr>
+<tr class="tr-rst"><td>1</td><td>0</td><td>X</td><td>X</td><td>X</td><td>0</td><td>1</td><td>Clear (async Reset)</td></tr>
+<tr class="tr-bad"><td>0</td><td>0</td><td>X</td><td>X</td><td>X</td><td>1</td><td>1</td><td>⚠ Forbidden!</td></tr>
+<tr class="tr-hld"><td>1</td><td>1</td><td>↑</td><td>0</td><td>0</td><td>Q</td><td>Q̄</td><td>Hold</td></tr>
+<tr class="tr-rst"><td>1</td><td>1</td><td>↑</td><td>0</td><td>1</td><td>0</td><td>1</td><td>Reset</td></tr>
+<tr class="tr-set"><td>1</td><td>1</td><td>↑</td><td>1</td><td>0</td><td>1</td><td>0</td><td>Set</td></tr>
+<tr class="tr-tog"><td>1</td><td>1</td><td>↑</td><td>1</td><td>1</td><td>Q̄</td><td>Q</td><td>Toggle</td></tr>
+</table>
+</div>
+<!-- PRE/CLR Timing Diagram -->
+<div class="sub">PRE/CLR Timing Diagram</div>
+<div class="diag">
+<svg width="580" height="175" viewBox="0 0 580 175">
+  <text x="5" y="22" fill="#3dd9c8" font-size="11">CLK</text>
+  <text x="5" y="58" fill="#4ec94e" font-size="10">PRĒ</text>
+  <text x="5" y="93" fill="#e85a4a" font-size="10">CLR̄</text>
+  <text x="5" y="128" fill="#b07bff" font-size="11">Q</text>
+  <!-- CLK -->
+  <polyline points="35,28 35,10 85,10 85,28 135,28 135,10 185,10 185,28 235,28 235,10 285,10 285,28 335,28 335,10 385,10 385,28 435,28 435,10 485,10 485,28 535,28 535,10 575,10" fill="none" stroke="#3dd9c8" stroke-width="2"/>
+  <!-- PRE: HIGH except dips LOW from t3→t4 -->
+  <polyline points="35,43 240,43 240,63 310,63 310,43 575,43" fill="none" stroke="#4ec94e" stroke-width="2.5"/>
+  <!-- CLR: HIGH except dips LOW from t5→t6 -->
+  <polyline points="35,78 390,78 390,98 460,98 460,78 575,78" fill="none" stroke="#e85a4a" stroke-width="2.5"/>
+  <!-- Q: starts LOW; PRE pulse (t3-t4) sets Q=1 regardless of CLK; CLR pulse (t5-t6) resets Q=0 async -->
+  <polyline points="35,133 240,133 240,113 310,113 310,113 390,113 390,133 460,133 460,133 575,133" fill="none" stroke="#b07bff" stroke-width="3"/>
+  <!-- Guides -->
+  <line x1="240" y1="5" x2="240" y2="140" stroke="#e8c84a" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <line x1="310" y1="5" x2="310" y2="140" stroke="#e8c84a" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <line x1="390" y1="5" x2="390" y2="140" stroke="#e85a4a" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <line x1="460" y1="5" x2="460" y2="140" stroke="#e85a4a" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <!-- Annotations -->
+  <text x="242" y="155" fill="#4ec94e" font-size="9">PRĒ=0 →Q=1 (no clock!)</text>
+  <text x="392" y="155" fill="#e85a4a" font-size="9">CLR̄=0 →Q=0 (no clock!)</text>
+  <!-- Level labels -->
+  <text x="38" y="40" fill="#4ec94e" font-size="8">1 (inactive)</text>
+  <text x="38" y="75" fill="#e85a4a" font-size="8">1 (inactive)</text>
+</svg>
+<div class="diag-lbl">PRE and CLR Override Clock — Q changes immediately when PRĒ or CLR̄ goes LOW</div>
+</div>
+</div>
+
+<!-- 2. Sequential Analysis Procedure -->
+<div class="card">
+<div class="card-title">2. Sequential Circuit Analysis — Step-by-Step Procedure</div>
+<div class="def">Analysis = Given a circuit → find its behavior (state table, state diagram, output equations).</div>
+<div class="steps">
+  <div class="step"><div class="sn">1</div><div><strong>Identify all flip-flops</strong> and their types (D, JK, T). Note how many state variables there are (n FFs → 2ⁿ states)</div></div>
+  <div class="step"><div class="sn">2</div><div><strong>Write Flip-Flop Input Equations</strong> from the combinational logic driving each FF's inputs (e.g., J_A = ..., K_A = ..., D_B = ...)</div></div>
+  <div class="step"><div class="sn">3</div><div><strong>Write Output Equations</strong> from logic driving output signals (z = ...)</div></div>
+  <div class="step"><div class="sn">4</div><div><strong>Apply Characteristic Equations</strong> to find next-state (Q(t+1) for each FF)</div></div>
+  <div class="step"><div class="sn">5</div><div><strong>Construct State Table:</strong> Enumerate all combinations of present states and inputs; compute next states and outputs</div></div>
+  <div class="step"><div class="sn">6</div><div><strong>Draw State Diagram</strong> from the state table: circles = states, arrows = transitions labeled with input/output</div></div>
+</div>
+</div>
+
+<!-- 3. Complete Analysis Example -->
+<div class="card">
+<div class="card-title">3. Complete Analysis Example — Circuit with Two JK Flip-Flops</div>
+<p>Consider a circuit with two JK FFs (A and B), one input x, one output y.</p>
+<div class="sub">Circuit Description (FF Input and Output Equations)</div>
+<div class="eq">J_A = x·B &nbsp;&nbsp;&nbsp; K_A = x̄·B̄ &nbsp;&nbsp;&nbsp; J_B = x &nbsp;&nbsp;&nbsp; K_B = x̄·A + x·Ā &nbsp;&nbsp;&nbsp; y = A·B</div>
+<div class="sub">Step 1: Present State Table Construction</div>
+<p>For each combination of present states (A,B) and input x, compute J_A, K_A, J_B, K_B, then use JK characteristic equation Q+ = JQ̄ + K̄Q:</p>
+<div class="tbl-wrap">
+<table>
+<tr><th>A(t)</th><th>B(t)</th><th>x</th><th>J_A</th><th>K_A</th><th>J_B</th><th>K_B</th><th>A(t+1)</th><th>B(t+1)</th><th>y</th></tr>
+<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>1</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+<tr class="tr-set"><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+</table>
+</div>
+<div class="sub">How to compute A(t+1) using JK formula: A+ = J_A·Ā + K̄_A·A</div>
+<ul class="n">
+<li>Row 1: A=0,B=0,x=0 → J_A=0,K_A=1: A+ = 0·1 + 0·0 = 0 ✓</li>
+<li>Row 4: A=0,B=1,x=1 → J_A=1,K_A=0: A+ = 1·1 + 1·0 = 1 ✓</li>
+<li>Row 8: A=1,B=1,x=1 → J_A=1,K_A=0: A+ = 1·0 + 1·1 = 1 ✓</li>
+</ul>
+<div class="sub">State Diagram (Mealy Machine)</div>
+<p>States = (A,B). Arcs labeled x/y. The circuit has 4 states: 00, 01, 10, 11.</p>
+<div class="diag">
+<svg width="500" height="200" viewBox="0 0 500 200">
+  <!-- State S0 = 00 -->
+  <circle cx="80" cy="100" r="32" fill="#151c27" stroke="#4d9de0" stroke-width="2"/>
+  <text x="80" y="97" fill="#4d9de0" font-size="14" text-anchor="middle" font-weight="700">S0</text>
+  <text x="80" y="114" fill="#7a8fa8" font-size="10" text-anchor="middle">AB=00</text>
+  <!-- State S1 = 01 -->
+  <circle cx="230" cy="40" r="32" fill="#151c27" stroke="#4ec94e" stroke-width="2"/>
+  <text x="230" y="37" fill="#4ec94e" font-size="14" text-anchor="middle" font-weight="700">S1</text>
+  <text x="230" y="54" fill="#7a8fa8" font-size="10" text-anchor="middle">AB=01</text>
+  <!-- State S2 = 10 -->
+  <circle cx="380" cy="100" r="32" fill="#151c27" stroke="#e88c4a" stroke-width="2"/>
+  <text x="380" y="97" fill="#e88c4a" font-size="14" text-anchor="middle" font-weight="700">S2</text>
+  <text x="380" y="114" fill="#7a8fa8" font-size="10" text-anchor="middle">AB=10</text>
+  <!-- State S3 = 11 -->
+  <circle cx="230" cy="160" r="32" fill="#151c27" stroke="#b07bff" stroke-width="2"/>
+  <text x="230" y="157" fill="#b07bff" font-size="14" text-anchor="middle" font-weight="700">S3</text>
+  <text x="230" y="174" fill="#7a8fa8" font-size="10" text-anchor="middle">AB=11</text>
+  <!-- S0 self-loop (x=0/0) -->
+  <path d="M60,70 Q30,40 65,72" fill="none" stroke="#4d9de0" stroke-width="1.5" marker-end="url(#aarr)"/>
+  <text x="15" y="58" fill="#7a8fa8" font-size="10">x=0/0</text>
+  <!-- S0→S1 (x=1/0) -->
+  <path d="M105,78 Q155,38 200,42" fill="none" stroke="#4ec94e" stroke-width="1.5" marker-end="url(#aarr)"/>
+  <text x="138" y="45" fill="#4ec94e" font-size="10">x=1/0</text>
+  <!-- S1 self-loop (x=0/0) -->
+  <path d="M210,12 Q190,-5 225,10" fill="none" stroke="#4ec94e" stroke-width="1.5" marker-end="url(#aarr)"/>
+  <text x="185" y="8" fill="#7a8fa8" font-size="10">x=0/0</text>
+  <!-- S1→S2 (x=1/0) -->
+  <path d="M260,48 Q320,48 352,80" fill="none" stroke="#e88c4a" stroke-width="1.5" marker-end="url(#aarr)"/>
+  <text x="295" y="42" fill="#e88c4a" font-size="10">x=1/0</text>
+  <!-- S2→S0 (x=0/0) -->
+  <path d="M352,118 Q250,165 112,118" fill="none" stroke="#4d9de0" stroke-width="1.5" marker-end="url(#aarr)"/>
+  <text x="220" y="162" fill="#4d9de0" font-size="9">x=0/0</text>
+  <!-- S2→S2 self (x=1/0) -->
+  <path d="M408,75 Q450,50 410,78" fill="none" stroke="#e88c4a" stroke-width="1.5" marker-end="url(#aarr)"/>
+  <text x="435" y="65" fill="#7a8fa8" font-size="10">x=1/0</text>
+  <!-- S3→S1 (x=0/1) -->
+  <path d="M205,140 Q195,100 200,72" fill="none" stroke="#b07bff" stroke-width="1.5" marker-end="url(#aarr)"/>
+  <text x="168" y="110" fill="#b07bff" font-size="10">x=0/1</text>
+  <!-- S3→S3? actually S3 x=1 goes to S2 -->
+  <path d="M258,148 Q325,140 360,122" fill="none" stroke="#b07bff" stroke-width="1.5" marker-end="url(#aarr)"/>
+  <text x="305" y="148" fill="#b07bff" font-size="10">x=1/1</text>
+  <defs>
+    <marker id="aarr" markerWidth="7" markerHeight="7" refX="5" refY="3.5" orient="auto"><polygon points="0,0 7,3.5 0,7" fill="#7a8fa8"/></marker>
+  </defs>
+</svg>
+<div class="diag-lbl">State Diagram — Mealy Machine (Arcs: input x / output y)</div>
+</div>
+</div>
+
+</div><!-- /L21 -->
+
+<!-- ═══════════════════════════════ LECTURE 23-24 ═══════════════════════════════ -->
+<div class="lec" id="l23">
+<div class="lec-hdr">
+  <span class="lec-num">LECTURES 23–24</span>
+  <h2 class="lec-title">Sequential Circuit Design · Excitation Tables · State-to-Circuit</h2>
+</div>
+
+<!-- 1. Moore vs Mealy -->
+<div class="card">
+<div class="card-title">1. Moore vs Mealy Machines</div>
+<div class="g2">
+<div>
+<div class="sub">Moore Machine</div>
+<div class="def">Output depends ONLY on present state. Output changes are synchronous (change with state transitions).</div>
+<ul class="n">
+  <li>Output assigned to states (circles in state diagram)</li>
+  <li>More states may be needed</li>
+  <li>More predictable — output glitch-free</li>
+  <li>State diagram: output written inside state circle</li>
+</ul>
+<div class="diag">
+<svg width="210" height="90" viewBox="0 0 210 90">
+  <circle cx="60" cy="45" r="28" fill="#151c27" stroke="#4d9de0" stroke-width="2"/>
+  <text x="60" y="42" fill="#4d9de0" font-size="12" text-anchor="middle" font-weight="700">S0</text>
+  <text x="60" y="56" fill="#4ec94e" font-size="11" text-anchor="middle">y=0</text>
+  <circle cx="155" cy="45" r="28" fill="#151c27" stroke="#b07bff" stroke-width="2"/>
+  <text x="155" y="42" fill="#b07bff" font-size="12" text-anchor="middle" font-weight="700">S1</text>
+  <text x="155" y="56" fill="#4ec94e" font-size="11" text-anchor="middle">y=1</text>
+  <path d="M88,35 Q108,15 128,35" fill="none" stroke="#7a8fa8" stroke-width="1.5" marker-end="url(#aarr)"/>
+  <text x="105" y="22" fill="#7a8fa8" font-size="10">x=1</text>
+  <path d="M128,55 Q108,75 88,55" fill="none" stroke="#7a8fa8" stroke-width="1.5" marker-end="url(#aarr)"/>
+  <text x="100" y="78" fill="#7a8fa8" font-size="10">x=0</text>
+  <text x="5" y="55" fill="#7a8fa8" font-size="8">output in state circle</text>
+</svg>
+<div class="diag-lbl">Moore: output=f(state)</div>
+</div>
+</div>
+<div>
+<div class="sub">Mealy Machine</div>
+<div class="def">Output depends on present state AND input. Output may change immediately when input changes.</div>
+<ul class="n">
+  <li>Output assigned to transitions (arcs in state diagram)</li>
+  <li>Fewer states typically needed</li>
+  <li>Output may have glitches if input glitches</li>
+  <li>State diagram: arc labeled input/output</li>
+</ul>
+<div class="diag">
+<svg width="210" height="90" viewBox="0 0 210 90">
+  <circle cx="60" cy="45" r="28" fill="#151c27" stroke="#4d9de0" stroke-width="2"/>
+  <text x="60" y="49" fill="#4d9de0" font-size="12" text-anchor="middle" font-weight="700">S0</text>
+  <circle cx="155" cy="45" r="28" fill="#151c27" stroke="#b07bff" stroke-width="2"/>
+  <text x="155" y="49" fill="#b07bff" font-size="12" text-anchor="middle" font-weight="700">S1</text>
+  <path d="M88,35 Q108,15 128,35" fill="none" stroke="#4ec94e" stroke-width="1.5" marker-end="url(#aarr)"/>
+  <text x="100" y="18" fill="#4ec94e" font-size="10">x=1/y=0</text>
+  <path d="M128,55 Q108,75 88,55" fill="none" stroke="#e88c4a" stroke-width="1.5" marker-end="url(#aarr)"/>
+  <text x="100" y="80" fill="#e88c4a" font-size="10">x=0/y=1</text>
+  <text x="5" y="15" fill="#7a8fa8" font-size="8">output on arc: input/output</text>
+</svg>
+<div class="diag-lbl">Mealy: output=f(state,input)</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 2. Excitation Tables -->
+<div class="card">
+<div class="card-title">2. Excitation Tables — What Inputs Drive Each FF for a Desired Transition</div>
+<div class="def">An <strong>excitation table</strong> is the INVERSE of the characteristic table. Given Q(t) and desired Q(t+1), it tells you what inputs (J,K or D or T) you must apply.</div>
+<div class="g2">
+<div>
+<p><strong style="color:#4d9de0">D FF Excitation Table</strong></p>
+<div class="tbl-wrap">
+<table>
+<tr><th>Q(t)</th><th>Q(t+1)</th><th>Required D</th></tr>
+<tr><td>0</td><td>0</td><td style="color:#4ec94e">D = 0</td></tr>
+<tr><td>0</td><td>1</td><td style="color:#4ec94e">D = 1</td></tr>
+<tr><td>1</td><td>0</td><td style="color:#4ec94e">D = 0</td></tr>
+<tr><td>1</td><td>1</td><td style="color:#4ec94e">D = 1</td></tr>
+</table>
+</div>
+<div class="key"><strong>D is always = Q(t+1).</strong> The simplest excitation table — D just mirrors what you want the output to be.</div>
+<hr>
+<p><strong style="color:#3dd9c8">T FF Excitation Table</strong></p>
+<div class="tbl-wrap">
+<table>
+<tr><th>Q(t)</th><th>Q(t+1)</th><th>Required T</th></tr>
+<tr><td>0</td><td>0</td><td style="color:#3dd9c8">T = 0 (hold)</td></tr>
+<tr><td>0</td><td>1</td><td style="color:#3dd9c8">T = 1 (toggle)</td></tr>
+<tr><td>1</td><td>0</td><td style="color:#3dd9c8">T = 1 (toggle)</td></tr>
+<tr><td>1</td><td>1</td><td style="color:#3dd9c8">T = 0 (hold)</td></tr>
+</table>
+</div>
+<div class="key"><strong>T = Q(t) ⊕ Q(t+1)</strong> — T is HIGH when transition is needed (0→1 or 1→0).</div>
+</div>
+<div>
+<p><strong style="color:#b07bff">JK FF Excitation Table</strong></p>
+<div class="tbl-wrap">
+<table>
+<tr><th>Q(t)</th><th>Q(t+1)</th><th>Required J</th><th>Required K</th></tr>
+<tr><td>0</td><td>0</td><td>J = 0</td><td>K = X (don't care)</td></tr>
+<tr><td>0</td><td>1</td><td>J = 1</td><td>K = X (don't care)</td></tr>
+<tr><td>1</td><td>0</td><td>J = X (don't care)</td><td>K = 1</td></tr>
+<tr><td>1</td><td>1</td><td>J = X (don't care)</td><td>K = 0</td></tr>
+</table>
+</div>
+<div class="key"><strong>X = Don't Care = more simplification in K-maps!</strong><br>
+Logic: 0→0: J must be 0 (can't set), K doesn't matter (already 0).<br>
+0→1: J must be 1 (set it!), K doesn't matter (already 0 so K won't reset).<br>
+1→0: K must be 1 (reset), J doesn't matter (already 1 so J won't set further).<br>
+1→1: K must be 0 (don't reset), J doesn't matter.</div>
+<p><strong style="color:#e88c4a">SR FF Excitation Table</strong></p>
+<div class="tbl-wrap">
+<table>
+<tr><th>Q(t)</th><th>Q(t+1)</th><th>Required S</th><th>Required R</th></tr>
+<tr><td>0</td><td>0</td><td>S=0</td><td>R=X</td></tr>
+<tr><td>0</td><td>1</td><td>S=1</td><td>R=0</td></tr>
+<tr><td>1</td><td>0</td><td>S=0</td><td>R=1</td></tr>
+<tr><td>1</td><td>1</td><td>S=X</td><td>R=0</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+<!-- 3. Design Procedure -->
+<div class="card">
+<div class="card-title">3. Sequential Circuit Design — Full Procedure with Worked Example</div>
+<div class="def">Design = Word description → Circuit implementation. Opposite of analysis.</div>
+<div class="steps">
+  <div class="step"><div class="sn">1</div><div><strong>State Diagram</strong> from word description</div></div>
+  <div class="step"><div class="sn">2</div><div><strong>State Table</strong> listing all states, inputs, next states, outputs</div></div>
+  <div class="step"><div class="sn">3</div><div><strong>State Assignment</strong> — assign binary values to each state (min FFs = ⌈log₂(n)⌉)</div></div>
+  <div class="step"><div class="sn">4</div><div><strong>Transition Table</strong> — substitute binary state values into state table</div></div>
+  <div class="step"><div class="sn">5</div><div><strong>FF Input Equations</strong> — using excitation table, determine J,K (or D) for each FF</div></div>
+  <div class="step"><div class="sn">6</div><div><strong>K-Map Simplification</strong> — simplify FF input equations</div></div>
+  <div class="step"><div class="sn">7</div><div><strong>Output Equation</strong> — simplify output logic</div></div>
+  <div class="step"><div class="sn">8</div><div><strong>Draw Circuit</strong> — gates + flip-flops</div></div>
+</div>
+<div class="sub">Worked Example: 2-bit Up Counter (counts 00→01→10→11→00)</div>
+<p>Step 1: State table for 2 D flip-flops (A=MSB, B=LSB), no external input:</p>
+<div class="tbl-wrap">
+<table>
+<tr><th>Present A</th><th>Present B</th><th>Next A</th><th>Next B</th><th>D_A needed</th><th>D_B needed</th></tr>
+<tr><td>0</td><td>0</td><td>0</td><td>1</td><td style="color:#4ec94e">0</td><td style="color:#4ec94e">1</td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td>0</td><td style="color:#4ec94e">1</td><td style="color:#4ec94e">0</td></tr>
+<tr><td>1</td><td>0</td><td>1</td><td>1</td><td style="color:#4ec94e">1</td><td style="color:#4ec94e">1</td></tr>
+<tr><td>1</td><td>1</td><td>0</td><td>0</td><td style="color:#4ec94e">0</td><td style="color:#4ec94e">0</td></tr>
+</table>
+</div>
+<p>Step 2: Read D equations from the table:</p>
+<div class="eq">D_A = A⊕B &nbsp;&nbsp;&nbsp;&nbsp; D_B = B̄ &nbsp;&nbsp;&nbsp; (B simply inverts each cycle)</div>
+<div class="sub">Circuit for 2-bit Counter</div>
+<div class="diag">
+<svg width="460" height="150" viewBox="0 0 460 150">
+  <!-- XOR for D_A -->
+  <path d="M 60,45 Q 90,45 95,60 Q 90,75 60,75 Q 78,60 60,45 Z" fill="#151c27" stroke="#4ec94e" stroke-width="1.5"/>
+  <path d="M 62,45 Q 72,60 62,75" fill="none" stroke="#4ec94e" stroke-width="1.2"/>
+  <text x="76" y="57" fill="#4ec94e" font-size="8">XOR</text>
+  <!-- NOT for D_B -->
+  <polygon points="60,105 60,125 80,115" fill="#151c27" stroke="#b07bff" stroke-width="1.5"/>
+  <circle cx="83" cy="115" r="4" fill="#151c27" stroke="#b07bff" stroke-width="1.5"/>
+  <!-- DFF A -->
+  <rect x="150" y="25" width="85" height="70" rx="6" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <text x="192" y="58" fill="#4d9de0" font-size="12" text-anchor="middle" font-weight="700">D FF</text>
+  <text x="192" y="73" fill="#7a8fa8" font-size="9" text-anchor="middle">(FF A)</text>
+  <!-- DFF B -->
+  <rect x="150" y="105" width="85" height="35" rx="6" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <text x="192" y="127" fill="#4d9de0" font-size="11" text-anchor="middle">D FF (B)</text>
+  <!-- XOR inputs: A and B feedback -->
+  <line x1="10" y1="55" x2="60" y2="55" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="3" y="59" fill="#e88c4a" font-size="10">A</text>
+  <line x1="10" y1="68" x2="60" y2="68" stroke="#b07bff" stroke-width="1.5"/>
+  <text x="3" y="72" fill="#b07bff" font-size="10">B</text>
+  <!-- NOT input: B -->
+  <line x1="10" y1="115" x2="60" y2="115" stroke="#b07bff" stroke-width="1.5"/>
+  <!-- XOR → D_A input -->
+  <line x1="95" y1="60" x2="150" y2="55" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="110" y="50" fill="#4ec94e" font-size="9">D_A=A⊕B</text>
+  <!-- NOT → D_B input -->
+  <line x1="87" y1="115" x2="150" y2="118" stroke="#b07bff" stroke-width="1.5"/>
+  <text x="95" y="110" fill="#b07bff" font-size="9">D_B=B̄</text>
+  <!-- CLK line -->
+  <line x1="10" y1="140" x2="450" y2="140" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="192" y1="95" x2="192" y2="140" stroke="#3dd9c8" stroke-width="1"/>
+  <line x1="192" y1="135" x2="192" y2="140" stroke="#3dd9c8" stroke-width="1"/>
+  <text x="3" y="138" fill="#3dd9c8" font-size="9">CLK</text>
+  <!-- Q outputs -->
+  <line x1="235" y1="50" x2="420" y2="50" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="422" y="54" fill="#e88c4a" font-size="11" font-weight="700">A</text>
+  <line x1="235" y1="122" x2="420" y2="122" stroke="#b07bff" stroke-width="1.5"/>
+  <text x="421" y="126" fill="#b07bff" font-size="11" font-weight="700">B</text>
+  <!-- Feedback dots -->
+  <circle cx="280" cy="50" r="3" fill="#e88c4a"/>
+  <circle cx="260" cy="122" r="3" fill="#b07bff"/>
+  <!-- Feedback wires to XOR -->
+  <line x1="280" y1="50" x2="280" y2="10" stroke="#e88c4a" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="280" y1="10" x2="10" y2="10" stroke="#e88c4a" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="10" y1="10" x2="10" y2="55" stroke="#e88c4a" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="260" y1="122" x2="260" y2="8" stroke="#b07bff" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="260" y1="8" x2="8" y2="8" stroke="#b07bff" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="8" y1="8" x2="8" y2="68" stroke="#b07bff" stroke-width="1" stroke-dasharray="3,2"/>
+</svg>
+<div class="diag-lbl">2-Bit Up Counter Circuit: D_A = A⊕B, D_B = B̄</div>
+</div>
+</div>
+
+</div><!-- /L23-24 -->
+
+<!-- ═══════════════════════════════ LECTURE 25 ═══════════════════════════════ -->
+<div class="lec" id="l25">
+<div class="lec-hdr">
+  <span class="lec-num">LECTURE 25</span>
+  <h2 class="lec-title">Sequential Circuit Design Practice — Problems 4.13, 4.14, 4.15</h2>
+</div>
+<div class="card">
+<div class="card-title">Design Checklist &amp; Common Exam Mistakes</div>
+<div class="g2">
+<div>
+<div class="sub">Step-by-Step Checklist</div>
+<ul class="n">
+  <li>Identify number of states → FFs needed = ⌈log₂(n)⌉</li>
+  <li>Draw complete state diagram (don't miss any transition)</li>
+  <li>Fill state table fully — include ALL input combinations</li>
+  <li>For D FF design: D = Q(next) directly (easiest)</li>
+  <li>For JK design: use excitation table carefully (X = don't care = 1 in K-map)</li>
+  <li>After K-map: verify simplified equations against state table</li>
+  <li>Check unused states — show they lead to valid states</li>
+  <li>Draw circuit — verify all wires connect correctly</li>
+</ul>
+</div>
+<div>
+<div class="sub">K-Map for FF Inputs (Reminder)</div>
+<div class="diag">
+<svg width="230" height="150" viewBox="0 0 230 150">
+  <!-- 4-cell K-map for 2 variables AB -->
+  <rect x="40" y="30" width="45" height="45" fill="#151c27" stroke="#4d9de0" stroke-width="1"/>
+  <rect x="85" y="30" width="45" height="45" fill="#151c27" stroke="#4d9de0" stroke-width="1"/>
+  <rect x="130" y="30" width="45" height="45" fill="#151c27" stroke="#4d9de0" stroke-width="1"/>
+  <rect x="175" y="30" width="45" height="45" fill="#151c27" stroke="#4d9de0" stroke-width="1"/>
+  <rect x="40" y="75" width="45" height="45" fill="#151c27" stroke="#4d9de0" stroke-width="1"/>
+  <rect x="85" y="75" width="45" height="45" fill="#151c27" stroke="#4d9de0" stroke-width="1"/>
+  <rect x="130" y="75" width="45" height="45" fill="#151c27" stroke="#4d9de0" stroke-width="1"/>
+  <rect x="175" y="75" width="45" height="45" fill="#151c27" stroke="#4d9de0" stroke-width="1"/>
+  <!-- Column headers -->
+  <text x="62" y="25" fill="#4d9de0" font-size="9" text-anchor="middle">00</text>
+  <text x="107" y="25" fill="#4d9de0" font-size="9" text-anchor="middle">01</text>
+  <text x="152" y="25" fill="#4d9de0" font-size="9" text-anchor="middle">11</text>
+  <text x="197" y="25" fill="#4d9de0" font-size="9" text-anchor="middle">10</text>
+  <text x="100" y="18" fill="#4d9de0" font-size="10" text-anchor="middle">→ AB</text>
+  <!-- Row headers -->
+  <text x="32" y="55" fill="#4ec94e" font-size="9" text-anchor="middle">0</text>
+  <text x="32" y="100" fill="#4ec94e" font-size="9" text-anchor="middle">1</text>
+  <text x="22" y="80" fill="#4ec94e" font-size="10" text-anchor="middle">x↓</text>
+  <!-- Sample values -->
+  <text x="62" y="56" fill="#e8c84a" font-size="12" text-anchor="middle">0</text>
+  <text x="107" y="56" fill="#e8c84a" font-size="12" text-anchor="middle">1</text>
+  <text x="152" y="56" fill="#e8c84a" font-size="12" text-anchor="middle">X</text>
+  <text x="197" y="56" fill="#e8c84a" font-size="12" text-anchor="middle">0</text>
+  <text x="62" y="100" fill="#e8c84a" font-size="12" text-anchor="middle">1</text>
+  <text x="107" y="100" fill="#e8c84a" font-size="12" text-anchor="middle">X</text>
+  <text x="152" y="100" fill="#e8c84a" font-size="12" text-anchor="middle">1</text>
+  <text x="197" y="100" fill="#e8c84a" font-size="12" text-anchor="middle">0</td>
+  <!-- Group circle -->
+  <ellipse cx="127" cy="78" rx="65" ry="28" fill="none" stroke="#4ec94e" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="70" y="140" fill="#4ec94e" font-size="9">Group X+1s → simplified term</text>
+</svg>
+<div class="diag-lbl">K-Map (X=don't care counts as 1 for grouping)</div>
+</div>
+</div>
+</div>
+<div class="warn"><strong>Common Mistakes:</strong> (1) Forgetting X can be grouped as 1 in K-map for JK design. (2) Not handling unused states. (3) Reading excitation table backward (confusing characteristic vs excitation). (4) Missing transitions in state diagram. (5) Wrong FF equation when toggling — use JK for toggle-heavy designs.</div>
+</div>
+</div><!-- /L25 -->
+
+
+<!-- ═══════════════════════════════ LECTURE 26 ═══════════════════════════════ -->
+<div class="lec" id="l26">
+<div class="lec-hdr">
+  <span class="lec-num">LECTURE 26</span>
+  <h2 class="lec-title">Registers — 4-bit Register with Parallel Load</h2>
+</div>
+
+<div class="card">
+<div class="card-title">1. What is a Register?</div>
+<div class="def">A <strong>register</strong> is a group of n flip-flops that stores an n-bit binary word. All FFs share the same clock.</div>
+<div class="g2">
+<div>
+<ul class="n">
+  <li>n-bit register = n flip-flops (usually D type)</li>
+  <li>All FFs clocked simultaneously → data stored in parallel</li>
+  <li>Common operations: Load, Hold, Shift, Clear</li>
+  <li>Registers are the basic storage unit inside a CPU</li>
+  <li>A register file = array of registers (e.g., 32 registers in MIPS)</li>
+</ul>
+</div>
+<div>
+<div class="diag">
+<svg width="210" height="100" viewBox="0 0 210 100">
+  <!-- 4 cells representing a 4-bit register -->
+  <rect x="20" y="25" width="40" height="50" rx="4" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <rect x="65" y="25" width="40" height="50" rx="4" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <rect x="110" y="25" width="40" height="50" rx="4" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <rect x="155" y="25" width="40" height="50" rx="4" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <text x="40" y="53" fill="#4d9de0" font-size="12" text-anchor="middle">B₃</text>
+  <text x="85" y="53" fill="#4d9de0" font-size="12" text-anchor="middle">B₂</text>
+  <text x="130" y="53" fill="#4d9de0" font-size="12" text-anchor="middle">B₁</text>
+  <text x="175" y="53" fill="#4d9de0" font-size="12" text-anchor="middle">B₀</text>
+  <text x="40" y="67" fill="#7a8fa8" font-size="9" text-anchor="middle">MSB</text>
+  <text x="175" y="67" fill="#7a8fa8" font-size="9" text-anchor="middle">LSB</text>
+  <line x1="20" y1="90" x2="195" y2="90" stroke="#3dd9c8" stroke-width="1.5"/>
+  <text x="100" y="100" fill="#3dd9c8" font-size="9" text-anchor="middle">Common CLK</text>
+</svg>
+<div class="diag-lbl">4-bit Register — 4 D Flip-Flops</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">2. 4-bit Register with Parallel Load — Complete Circuit</div>
+<p>A <strong>parallel load</strong> register has a control input <strong>LD (Load)</strong>. When LD=1, the register loads new 4-bit data on the clock edge. When LD=0, it holds its current value.</p>
+<p>Implementation: Each D input is a 2:1 MUX: <code>D_i = LD·I_i + L̄D·Q_i</code></p>
+<div class="diag">
+<svg width="600" height="240" viewBox="0 0 600 240">
+  <!-- 4 DFF units with MUX selection -->
+  <!-- For each bit: MUX block then D FF -->
+  <!-- Bit 3 (leftmost MSB) -->
+  <!-- MUX 3 -->
+  <rect x="30" y="55" width="55" height="70" rx="5" fill="#151c27" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="57" y="88" fill="#4ec94e" font-size="9" text-anchor="middle">2:1</text>
+  <text x="57" y="100" fill="#4ec94e" font-size="9" text-anchor="middle">MUX</text>
+  <!-- DFF 3 -->
+  <rect x="115" y="50" width="60" height="80" rx="6" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <text x="145" y="90" fill="#4d9de0" font-size="11" text-anchor="middle" font-weight="700">DFF</text>
+  <text x="145" y="105" fill="#7a8fa8" font-size="9" text-anchor="middle">bit 3</text>
+  <!-- MUX 2 -->
+  <rect x="185" y="55" width="55" height="70" rx="5" fill="#151c27" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="212" y="88" fill="#4ec94e" font-size="9" text-anchor="middle">2:1</text>
+  <text x="212" y="100" fill="#4ec94e" font-size="9" text-anchor="middle">MUX</text>
+  <!-- DFF 2 -->
+  <rect x="270" y="50" width="60" height="80" rx="6" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <text x="300" y="90" fill="#4d9de0" font-size="11" text-anchor="middle" font-weight="700">DFF</text>
+  <text x="300" y="105" fill="#7a8fa8" font-size="9" text-anchor="middle">bit 2</text>
+  <!-- MUX 1 -->
+  <rect x="340" y="55" width="55" height="70" rx="5" fill="#151c27" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="367" y="88" fill="#4ec94e" font-size="9" text-anchor="middle">2:1</text>
+  <text x="367" y="100" fill="#4ec94e" font-size="9" text-anchor="middle">MUX</text>
+  <!-- DFF 1 -->
+  <rect x="425" y="50" width="60" height="80" rx="6" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <text x="455" y="90" fill="#4d9de0" font-size="11" text-anchor="middle" font-weight="700">DFF</text>
+  <text x="455" y="105" fill="#7a8fa8" font-size="9" text-anchor="middle">bit 1</text>
+  <!-- MUX 0 (rightmost/LSB hidden for brevity, show dots) -->
+  <text x="550" y="92" fill="#7a8fa8" font-size="16" text-anchor="middle">···</text>
+
+  <!-- Input I lines (top arrows) -->
+  <line x1="57" y1="15" x2="57" y2="55" stroke="#e88c4a" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="50" y="12" fill="#e88c4a" font-size="10">I₃</text>
+  <line x1="212" y1="15" x2="212" y2="55" stroke="#e88c4a" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="205" y="12" fill="#e88c4a" font-size="10">I₂</text>
+  <line x1="367" y1="15" x2="367" y2="55" stroke="#e88c4a" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="360" y="12" fill="#e88c4a" font-size="10">I₁</text>
+
+  <!-- LD control bus -->
+  <line x1="10" y1="112" x2="570" y2="112" stroke="#b07bff" stroke-width="1.5" stroke-dasharray="6,2"/>
+  <line x1="57" y1="112" x2="57" y2="125" stroke="#b07bff" stroke-width="1"/>
+  <line x1="212" y1="112" x2="212" y2="125" stroke="#b07bff" stroke-width="1"/>
+  <line x1="367" y1="112" x2="367" y2="125" stroke="#b07bff" stroke-width="1"/>
+  <text x="5" y="108" fill="#b07bff" font-size="10">LD</text>
+
+  <!-- MUX to DFF connections -->
+  <line x1="85" y1="90" x2="115" y2="90" stroke="#4ec94e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="240" y1="90" x2="270" y2="90" stroke="#4ec94e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="395" y1="90" x2="425" y2="90" stroke="#4ec94e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="92" y="84" fill="#4ec94e" font-size="8">D₃</text>
+  <text x="247" y="84" fill="#4ec94e" font-size="8">D₂</text>
+  <text x="402" y="84" fill="#4ec94e" font-size="8">D₁</text>
+
+  <!-- CLK line -->
+  <line x1="10" y1="200" x2="570" y2="200" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="145" y1="130" x2="145" y2="200" stroke="#3dd9c8" stroke-width="1"/>
+  <line x1="300" y1="130" x2="300" y2="200" stroke="#3dd9c8" stroke-width="1"/>
+  <line x1="455" y1="130" x2="455" y2="200" stroke="#3dd9c8" stroke-width="1"/>
+  <text x="3" y="198" fill="#3dd9c8" font-size="9">CLK</text>
+
+  <!-- Q outputs -->
+  <line x1="175" y1="80" x2="185" y2="73" stroke="#b07bff" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="330" y1="80" x2="340" y2="73" stroke="#b07bff" stroke-width="1" stroke-dasharray="3,2"/>
+  <text x="175" y="78" fill="#b07bff" font-size="8">Q₃→MUX₂</text>
+  <line x1="175" y1="82" x2="590" y2="82" stroke="#3dd9c8" stroke-width="1.5"/>
+  <text x="500" y="75" fill="#3dd9c8" font-size="10">Q₃ Q₂ Q₁ Q₀</text>
+  <!-- Output label -->
+  <text x="130" y="218" fill="#7a8fa8" font-size="9">When LD=1: D_i=I_i (load). When LD=0: D_i=Q_i (hold current value)</text>
+  <!-- MUX equation -->
+  <text x="200" y="230" fill="#e8c84a" font-size="10">D_i = LD·I_i + LD̄·Q_i   ←  MUX select logic</text>
+</svg>
+<div class="diag-lbl">4-bit Register with Parallel Load — MUX selects Load vs Hold</div>
+</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>LD</th><th>CLK Edge</th><th>Q₃Q₂Q₁Q₀ (next)</th><th>Operation</th></tr>
+<tr class="tr-hld"><td>0</td><td>↑</td><td>Q₃Q₂Q₁Q₀ (unchanged)</td><td>Hold — register retains data</td></tr>
+<tr class="tr-set"><td>1</td><td>↑</td><td>I₃I₂I₁I₀</td><td>Parallel Load — new data stored</td></tr>
+</table>
+</div>
+</div>
+
+</div><!-- /L26 -->
+
+<!-- ═══════════════════════════════ LECTURE 27 ═══════════════════════════════ -->
+<div class="lec" id="l27">
+<div class="lec-hdr">
+  <span class="lec-num">LECTURE 27</span>
+  <h2 class="lec-title">Shift Registers — All Types · Serial Addition · Bidirectional</h2>
+</div>
+
+<div class="card">
+<div class="card-title">1. Shift Register Concept &amp; Types</div>
+<div class="def">A <strong>shift register</strong> moves data laterally — each clock edge shifts all bits one position left or right. The entering bit comes from a serial input; the exiting bit is the serial output.</div>
+<div class="g2">
+<div>
+<div class="tbl-wrap">
+<table>
+<tr><th>Type</th><th>Input</th><th>Output</th><th>Use Case</th></tr>
+<tr><td style="color:#4d9de0">SISO</td><td>Serial</td><td>Serial</td><td>Delay, pipeline</td></tr>
+<tr><td style="color:#4ec94e">SIPO</td><td>Serial</td><td>Parallel</td><td>Serial→parallel conversion</td></tr>
+<tr><td style="color:#e88c4a">PISO</td><td>Parallel</td><td>Serial</td><td>Parallel→serial conversion</td></tr>
+<tr><td style="color:#b07bff">PIPO</td><td>Parallel</td><td>Parallel</td><td>Data buffering, storage</td></tr>
+</table>
+</div>
+</div>
+<div>
+<div class="key"><strong>Applications:</strong>
+<ul class="n">
+  <li>Serial communication (UART, SPI, I2C)</li>
+  <li>Serial arithmetic (serial adder)</li>
+  <li>Pseudo-random sequence generation (LFSR)</li>
+  <li>Data conversion (parallel↔serial)</li>
+  <li>Cyclic data storage (ring counter)</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">2. 4-bit Serial-In Serial-Out (SISO) Shift Register — Full Gate Circuit</div>
+<p>Data enters at serial input (SI) and propagates through the chain of D flip-flops, one position per clock edge. After 4 clock pulses, the original 4-bit input exits as serial output (SO).</p>
+<div class="diag">
+<svg width="590" height="155" viewBox="0 0 590 155">
+  <!-- Serial In -->
+  <text x="5" y="68" fill="#4ec94e" font-size="11">SI</text>
+  <line x1="25" y1="65" x2="55" y2="65" stroke="#4ec94e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- DFF A -->
+  <rect x="55" y="30" width="75" height="70" rx="6" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <text x="92" y="68" fill="#4d9de0" font-size="13" text-anchor="middle" font-weight="700">A</text>
+  <text x="92" y="83" fill="#7a8fa8" font-size="9" text-anchor="middle">D FF</text>
+  <!-- DFF B -->
+  <rect x="185" y="30" width="75" height="70" rx="6" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <text x="222" y="68" fill="#4d9de0" font-size="13" text-anchor="middle" font-weight="700">B</text>
+  <text x="222" y="83" fill="#7a8fa8" font-size="9" text-anchor="middle">D FF</text>
+  <!-- DFF C -->
+  <rect x="315" y="30" width="75" height="70" rx="6" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <text x="352" y="68" fill="#4d9de0" font-size="13" text-anchor="middle" font-weight="700">C</text>
+  <text x="352" y="83" fill="#7a8fa8" font-size="9" text-anchor="middle">D FF</text>
+  <!-- DFF D -->
+  <rect x="445" y="30" width="75" height="70" rx="6" fill="#151c27" stroke="#4d9de0" stroke-width="1.8"/>
+  <text x="482" y="68" fill="#4d9de0" font-size="13" text-anchor="middle" font-weight="700">D</text>
+  <text x="482" y="83" fill="#7a8fa8" font-size="9" text-anchor="middle">D FF</text>
+  <!-- Q_A → D_B connections (the shift) -->
+  <line x1="130" y1="65" x2="185" y2="65" stroke="#e88c4a" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="260" y1="65" x2="315" y2="65" stroke="#e88c4a" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="390" y1="65" x2="445" y2="65" stroke="#e88c4a" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- Connection labels -->
+  <text x="143" y="60" fill="#e88c4a" font-size="9">Q_A→D_B</text>
+  <text x="272" y="60" fill="#e88c4a" font-size="9">Q_B→D_C</text>
+  <text x="402" y="60" fill="#e88c4a" font-size="9">Q_C→D_D</text>
+  <!-- Serial output -->
+  <line x1="520" y1="65" x2="570" y2="65" stroke="#4ec94e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="575" y="68" fill="#4ec94e" font-size="11">SO</text>
+  <!-- Common CLK line -->
+  <line x1="55" y1="130" x2="525" y2="130" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="92" y1="100" x2="92" y2="130" stroke="#3dd9c8" stroke-width="1"/>
+  <line x1="222" y1="100" x2="222" y2="130" stroke="#3dd9c8" stroke-width="1"/>
+  <line x1="352" y1="100" x2="352" y2="130" stroke="#3dd9c8" stroke-width="1"/>
+  <line x1="482" y1="100" x2="482" y2="130" stroke="#3dd9c8" stroke-width="1"/>
+  <text x="5" y="133" fill="#3dd9c8" font-size="11">CLK</text>
+  <!-- Q labels at top -->
+  <text x="87" y="28" fill="#b07bff" font-size="9">Q_A</text>
+  <text x="217" y="28" fill="#b07bff" font-size="9">Q_B</text>
+  <text x="347" y="28" fill="#b07bff" font-size="9">Q_C</text>
+  <text x="477" y="28" fill="#b07bff" font-size="9">Q_D</text>
+  <!-- Shift direction arrow -->
+  <text x="225" y="148" fill="#8b949e" font-size="10" text-anchor="middle">← Data shifts RIGHT on each rising clock edge</text>
+</svg>
+<div class="diag-lbl">4-bit SISO Shift Register — Each CLK pulse shifts data one position right</div>
+</div>
+
+<div class="sub">Shift Operation Example (Initial state: ABCD=0000, Input: 1011)</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>CLK Pulse</th><th>SI</th><th>A (MSB)</th><th>B</th><th>C</th><th>D (SO)</th></tr>
+<tr><td>Initial</td><td>-</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr class="tr-set"><td>1</td><td>1</td><td>1</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>2</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td></tr>
+<tr class="tr-set"><td>3</td><td>1</td><td>1</td><td>0</td><td>1</td><td>0</td></tr>
+<tr class="tr-set"><td>4</td><td>1</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+</table>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">3. SIPO (Serial-In Parallel-Out) Shift Register</div>
+<p>Same circuit as SISO, but ALL Q outputs are read simultaneously as parallel output. Used to convert serial data to parallel — e.g., receiving serial communication data.</p>
+<div class="diag">
+<svg width="540" height="140" viewBox="0 0 540 140">
+  <!-- 4 DFFs -->
+  <rect x="50" y="25" width="65" height="60" rx="5" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <text x="82" y="60" fill="#4d9de0" font-size="12" text-anchor="middle" font-weight="700">A</text>
+  <rect x="165" y="25" width="65" height="60" rx="5" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <text x="197" y="60" fill="#4d9de0" font-size="12" text-anchor="middle" font-weight="700">B</text>
+  <rect x="280" y="25" width="65" height="60" rx="5" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <text x="312" y="60" fill="#4d9de0" font-size="12" text-anchor="middle" font-weight="700">C</text>
+  <rect x="395" y="25" width="65" height="60" rx="5" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <text x="427" y="60" fill="#4d9de0" font-size="12" text-anchor="middle" font-weight="700">D</text>
+  <!-- Shift connections -->
+  <line x1="115" y1="55" x2="165" y2="55" stroke="#e88c4a" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="230" y1="55" x2="280" y2="55" stroke="#e88c4a" stroke-width="2" marker-end="url(#arr)"/>
+  <line x1="345" y1="55" x2="395" y2="55" stroke="#e88c4a" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- SI -->
+  <line x1="10" y1="55" x2="50" y2="55" stroke="#4ec94e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="3" y="59" fill="#4ec94e" font-size="10">SI</text>
+  <!-- Parallel outputs going DOWN -->
+  <line x1="82" y1="85" x2="82" y2="125" stroke="#b07bff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="197" y1="85" x2="197" y2="125" stroke="#b07bff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="312" y1="85" x2="312" y2="125" stroke="#b07bff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <line x1="427" y1="85" x2="427" y2="125" stroke="#b07bff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="73" y="135" fill="#b07bff" font-size="10">Q_A</text>
+  <text x="188" y="135" fill="#b07bff" font-size="10">Q_B</text>
+  <text x="303" y="135" fill="#b07bff" font-size="10">Q_C</text>
+  <text x="418" y="135" fill="#b07bff" font-size="10">Q_D</text>
+  <!-- CLK -->
+  <line x1="50" y1="105" x2="465" y2="105" stroke="#3dd9c8" stroke-width="1.5"/>
+  <text x="3" y="108" fill="#3dd9c8" font-size="9">CLK</text>
+  <text x="175" y="17" fill="#b07bff" font-size="9">← Parallel Output (all Q bits simultaneously) →</text>
+</svg>
+<div class="diag-lbl">SIPO — Serial data loaded, then read all 4 bits at once as parallel output</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">4. Bidirectional Shift Register with Parallel Load</div>
+<p>Most practical shift registers support: <strong>Shift Right, Shift Left, Parallel Load, and Hold</strong> — selected by 2-bit mode control (s₁, s₀).</p>
+<div class="g2">
+<div>
+<div class="tbl-wrap">
+<table>
+<tr><th>s₁</th><th>s₀</th><th>Operation</th></tr>
+<tr class="tr-hld"><td>0</td><td>0</td><td>Hold (No Change)</td></tr>
+<tr><td>0</td><td>1</td><td>Shift Right (Q_i ← Q_{i+1})</td></tr>
+<tr><td>1</td><td>0</td><td>Shift Left (Q_i ← Q_{i-1})</td></tr>
+<tr class="tr-set"><td>1</td><td>1</td><td>Parallel Load (Q_i ← I_i)</td></tr>
+</table>
+</div>
+<div class="eq">D_i = s₁s₀·I_i + s₁s̄₀·Q_{i-1} + s̄₁s₀·Q_{i+1} + s̄₁s̄₀·Q_i</div>
+<p>This is implemented with a <strong>4:1 MUX</strong> at each FF's D input, selected by (s₁, s₀).</p>
+</div>
+<div>
+<div class="diag">
+<svg width="260" height="190" viewBox="0 0 260 190">
+  <!-- 4:1 MUX -->
+  <rect x="30" y="55" width="60" height="90" rx="5" fill="#151c27" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="60" y="95" fill="#4ec94e" font-size="9" text-anchor="middle">4:1</text>
+  <text x="60" y="108" fill="#4ec94e" font-size="9" text-anchor="middle">MUX</text>
+  <!-- DFF -->
+  <rect x="140" y="65" width="70" height="70" rx="6" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <text x="175" y="105" fill="#4d9de0" font-size="11" text-anchor="middle">D FF</text>
+  <!-- MUX inputs -->
+  <text x="3" y="70" fill="#b07bff" font-size="9">I_i</text>
+  <line x1="20" y1="68" x2="30" y2="72" stroke="#b07bff" stroke-width="1"/>
+  <text x="3" y="88" fill="#4ec94e" font-size="9">Q_{i-1}</text>
+  <line x1="25" y1="86" x2="30" y2="88" stroke="#4ec94e" stroke-width="1"/>
+  <text x="3" y="106" fill="#e88c4a" font-size="9">Q_{i+1}</text>
+  <line x1="25" y1="104" x2="30" y2="104" stroke="#e88c4a" stroke-width="1"/>
+  <text x="3" y="124" fill="#7a8fa8" font-size="9">Q_i</text>
+  <line x1="20" y1="122" x2="30" y2="120" stroke="#7a8fa8" stroke-width="1"/>
+  <!-- MUX output to DFF -->
+  <line x1="90" y1="100" x2="140" y2="100" stroke="#4ec94e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <!-- Select inputs -->
+  <line x1="60" y1="145" x2="60" y2="165" stroke="#3dd9c8" stroke-width="1.5"/>
+  <text x="40" y="175" fill="#3dd9c8" font-size="9">s₁ s₀</text>
+  <text x="38" y="188" fill="#3dd9c8" font-size="8">(control)</text>
+  <!-- DFF output -->
+  <line x1="210" y1="100" x2="245" y2="100" stroke="#b07bff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="248" y="104" fill="#b07bff" font-size="10">Q_i</text>
+  <!-- CLK -->
+  <line x1="175" y1="135" x2="175" y2="155" stroke="#3dd9c8" stroke-width="1"/>
+  <text x="160" y="168" fill="#3dd9c8" font-size="9">CLK</text>
+  <!-- Labels -->
+  <text x="5" y="48" fill="#7a8fa8" font-size="8">s₁s₀=11 → Load I_i</text>
+  <text x="5" y="38" fill="#7a8fa8" font-size="8">s₁s₀=10 → Left (Q_{i-1})</text>
+  <text x="5" y="28" fill="#7a8fa8" font-size="8">s₁s₀=01 → Right (Q_{i+1})</text>
+</svg>
+<div class="diag-lbl">One Bit of Bidirectional Register — 4:1 MUX at D input</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">5. Serial Adder Using Shift Register</div>
+<div class="def">A <strong>serial adder</strong> adds two n-bit numbers one bit at a time, using a single full adder and a carry flip-flop to store the carry between additions.</div>
+<div class="diag">
+<svg width="530" height="140" viewBox="0 0 530 140">
+  <!-- Register A -->
+  <rect x="10" y="15" width="130" height="40" rx="5" fill="#151c27" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="75" y="40" fill="#4ec94e" font-size="12" text-anchor="middle" font-weight="700">Register A (shift)</text>
+  <!-- Register B -->
+  <rect x="10" y="75" width="130" height="40" rx="5" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <text x="75" y="100" fill="#4d9de0" font-size="12" text-anchor="middle" font-weight="700">Register B (shift)</text>
+  <!-- LSB outputs of A and B -->
+  <line x1="140" y1="35" x2="200" y2="35" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="150" y="30" fill="#4ec94e" font-size="9">A_LSB</text>
+  <line x1="140" y1="95" x2="200" y2="95" stroke="#4d9de0" stroke-width="1.5"/>
+  <text x="150" y="90" fill="#4d9de0" font-size="9">B_LSB</text>
+  <!-- Full Adder block -->
+  <rect x="200" y="50" width="80" height="55" rx="6" fill="#151c27" stroke="#b07bff" stroke-width="2"/>
+  <text x="240" y="77" fill="#b07bff" font-size="11" text-anchor="middle" font-weight="700">Full</text>
+  <text x="240" y="92" fill="#b07bff" font-size="11" text-anchor="middle" font-weight="700">Adder</text>
+  <!-- FA input lines -->
+  <line x1="200" y1="65" x2="200" y2="65" stroke="#4ec94e" stroke-width="1"/>
+  <line x1="200" y1="35" x2="200" y2="62" stroke="#4ec94e" stroke-width="1.5"/>
+  <line x1="200" y1="62" x2="200" y2="62" stroke="#4ec94e" stroke-width="1.5"/>
+  <line x1="200" y1="95" x2="200" y2="88" stroke="#4d9de0" stroke-width="1.5"/>
+  <!-- Sum output from FA -->
+  <line x1="280" y1="70" x2="330" y2="70" stroke="#e8c84a" stroke-width="1.5"/>
+  <text x="285" y="65" fill="#e8c84a" font-size="9">Sum</text>
+  <!-- Carry out from FA -->
+  <line x1="280" y1="90" x2="330" y2="90" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="285" y="105" fill="#e88c4a" font-size="9">Carry_out</text>
+  <!-- Carry FF -->
+  <rect x="330" y="80" width="60" height="40" rx="5" fill="#151c27" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="360" y="102" fill="#e88c4a" font-size="10" text-anchor="middle">D FF</text>
+  <text x="360" y="115" fill="#7a8fa8" font-size="8" text-anchor="middle">(carry)</text>
+  <!-- Carry FF output back to FA as Carry_in -->
+  <line x1="390" y1="100" x2="410" y2="100" stroke="#e88c4a" stroke-width="1.5"/>
+  <line x1="410" y1="100" x2="410" y2="30" stroke="#e88c4a" stroke-width="1.5"/>
+  <line x1="410" y1="30" x2="195" y2="30" stroke="#e88c4a" stroke-width="1.5"/>
+  <line x1="195" y1="30" x2="195" y2="75" stroke="#e88c4a" stroke-width="1.5"/>
+  <line x1="195" y1="75" x2="200" y2="75" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="400" y="50" fill="#e88c4a" font-size="9">C_in</text>
+  <!-- Sum serial output back to register A -->
+  <line x1="330" y1="70" x2="330" y2="15" stroke="#e8c84a" stroke-width="1.5"/>
+  <line x1="330" y1="15" x2="10" y2="15" stroke="#e8c84a" stroke-width="1.5" stroke-dasharray="4,2"/>
+  <text x="165" y="12" fill="#e8c84a" font-size="9">Sum fed back to A(MSB)</text>
+  <!-- CLK line -->
+  <line x1="10" y1="130" x2="520" y2="130" stroke="#3dd9c8" stroke-width="1"/>
+  <text x="3" y="128" fill="#3dd9c8" font-size="8">CLK</text>
+</svg>
+<div class="diag-lbl">Serial Adder — Full Adder + Carry FF + Two Shift Registers</div>
+</div>
+<ul class="n">
+  <li>Start with carry FF = 0</li>
+  <li>Each clock pulse: adds LSBs of A and B plus carry → sum stored back into A, carry stored in carry FF</li>
+  <li>After n clock pulses: A contains the full sum</li>
+  <li>Takes n clock cycles for n-bit addition (slower but less hardware than parallel adder)</li>
+</ul>
+</div>
+
+</div><!-- /L27 -->
+
+<!-- ═══════════════════════════════ LECTURE 28 ═══════════════════════════════ -->
+<div class="lec" id="l28">
+<div class="lec-hdr">
+  <span class="lec-num">LECTURE 28</span>
+  <h2 class="lec-title">Microoperations &amp; Counters: Ripple (Asynchronous) Counter</h2>
+</div>
+
+<div class="card">
+<div class="card-title">1. Microoperations &amp; Register Transfer Language (RTL)</div>
+<div class="def">A <strong>microoperation</strong> is a basic operation on data in registers, performed in one clock cycle. Register Transfer Language (RTL) describes these operations symbolically.</div>
+<div class="g2">
+<div>
+<div class="sub">RTL Notation</div>
+<ul class="n">
+  <li><code>R2 ← R1</code> : Transfer R1 into R2</li>
+  <li><code>R1 ← R1 + R2</code> : Arithmetic add</li>
+  <li><code>R1 ← R1 ∧ R2</code> : Logic AND</li>
+  <li><code>R1 ← shl R1</code> : Shift left by 1</li>
+  <li><code>P: R2 ← R1</code> : Conditional (only if P=1)</li>
+  <li><code>if (P=1) then R2 ← R1</code> : Same</li>
+</ul>
+</div>
+<div>
+<div class="sub">Classes of Microoperations</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>Class</th><th>Operations</th></tr>
+<tr><td style="color:#4d9de0">Transfer</td><td>Copy, Move data</td></tr>
+<tr><td style="color:#4ec94e">Arithmetic</td><td>Add, Sub, Increment, Decrement, Negate</td></tr>
+<tr><td style="color:#b07bff">Logic</td><td>AND, OR, XOR, NOT, Shift</td></tr>
+<tr><td style="color:#e88c4a">Shift</td><td>Left shift, Right shift, Rotate</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">2. Counters — Introduction</div>
+<div class="def">A <strong>counter</strong> is a sequential circuit that cycles through a fixed sequence of states on successive clock pulses.</div>
+<div class="g2">
+<div>
+<div class="sub">Asynchronous (Ripple) Counter</div>
+<ul class="n">
+  <li>Flip-flops NOT clocked simultaneously</li>
+  <li>Q̄ output of each FF drives clock of next FF</li>
+  <li>Propagation delay <em>accumulates</em>: total delay = n × t_FF</li>
+  <li>Simpler to build but produces glitches</li>
+  <li>Also called <em>ripple counter</em> because carry ripples through stages</li>
+</ul>
+</div>
+<div>
+<div class="sub">Synchronous Counter</div>
+<ul class="n">
+  <li>All flip-flops clocked simultaneously</li>
+  <li>Combinational logic determines which FFs toggle</li>
+  <li>Total delay = one gate delay + one FF delay</li>
+  <li>No glitches; faster; more hardware</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">3. 4-bit Ripple Counter — Full Circuit (Using T Flip-Flops)</div>
+<p>Built from 4 T flip-flops with T=1 (always). Each FF toggles when its clock input goes <strong>HIGH → LOW</strong> (falling edge, using Q̄ as the next FF's clock). This effectively creates the binary count sequence.</p>
+<div class="diag">
+<svg width="580" height="170" viewBox="0 0 580 170">
+  <!-- CLK line in -->
+  <text x="3" y="80" fill="#3dd9c8" font-size="11">CLK</text>
+  <line x1="28" y1="76" x2="60" y2="76" stroke="#3dd9c8" stroke-width="2" marker-end="url(#arr)"/>
+  <!-- TFF 0 -->
+  <rect x="60" y="35" width="90" height="80" rx="7" fill="#151c27" stroke="#b07bff" stroke-width="2"/>
+  <text x="105" y="73" fill="#b07bff" font-size="13" text-anchor="middle" font-weight="700">TFF₀</text>
+  <text x="105" y="88" fill="#3dd9c8" font-size="9" text-anchor="middle">T=1 (tied)</text>
+  <!-- Falling edge triangle (neg edge) -->
+  <polygon points="60,68 60,84 48,76" fill="#3dd9c8"/>
+  <circle cx="57" cy="76" r="4" fill="#151c27" stroke="#3dd9c8" stroke-width="1.5"/>
+  <!-- Q0 output and Q0-bar -->
+  <line x1="150" y1="58" x2="575" y2="58" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="555" y="52" fill="#4ec94e" font-size="10">Q₀(LSB)</text>
+  <!-- Q0-bar → CLK of TFF1 -->
+  <line x1="150" y1="95" x2="190" y2="95" stroke="#e85a4a" stroke-width="1.5"/>
+  <text x="152" y="90" fill="#e85a4a" font-size="9">Q̄₀</text>
+  <!-- TFF 1 -->
+  <rect x="190" y="35" width="90" height="80" rx="7" fill="#151c27" stroke="#b07bff" stroke-width="2"/>
+  <text x="235" y="73" fill="#b07bff" font-size="13" text-anchor="middle" font-weight="700">TFF₁</text>
+  <text x="235" y="88" fill="#3dd9c8" font-size="9" text-anchor="middle">T=1</text>
+  <polygon points="190,68 190,84 178,76" fill="#e85a4a"/>
+  <circle cx="187" cy="76" r="4" fill="#151c27" stroke="#e85a4a" stroke-width="1.5"/>
+  <!-- Q1 output -->
+  <line x1="280" y1="58" x2="440" y2="58" stroke="#4ec94e" stroke-width="1.2" stroke-dasharray="4,2"/>
+  <text x="328" y="52" fill="#4ec94e" font-size="10">Q₁</text>
+  <!-- Q1-bar → CLK of TFF2 -->
+  <line x1="280" y1="95" x2="320" y2="95" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="282" y="90" fill="#e88c4a" font-size="9">Q̄₁</text>
+  <!-- TFF 2 -->
+  <rect x="320" y="35" width="90" height="80" rx="7" fill="#151c27" stroke="#b07bff" stroke-width="2"/>
+  <text x="365" y="73" fill="#b07bff" font-size="13" text-anchor="middle" font-weight="700">TFF₂</text>
+  <text x="365" y="88" fill="#3dd9c8" font-size="9" text-anchor="middle">T=1</text>
+  <polygon points="320,68 320,84 308,76" fill="#e88c4a"/>
+  <circle cx="317" cy="76" r="4" fill="#151c27" stroke="#e88c4a" stroke-width="1.5"/>
+  <!-- Q2-bar → CLK of TFF3 -->
+  <line x1="410" y1="95" x2="450" y2="95" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="412" y="90" fill="#4ec94e" font-size="9">Q̄₂</text>
+  <!-- TFF 3 -->
+  <rect x="450" y="35" width="90" height="80" rx="7" fill="#151c27" stroke="#b07bff" stroke-width="2"/>
+  <text x="495" y="73" fill="#b07bff" font-size="13" text-anchor="middle" font-weight="700">TFF₃</text>
+  <text x="495" y="88" fill="#3dd9c8" font-size="9" text-anchor="middle">T=1</text>
+  <polygon points="450,68 450,84 438,76" fill="#4ec94e"/>
+  <circle cx="447" cy="76" r="4" fill="#151c27" stroke="#4ec94e" stroke-width="1.5"/>
+  <!-- Q3 output -->
+  <line x1="540" y1="58" x2="575" y2="58" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="555" y="35" fill="#e88c4a" font-size="10">Q₃(MSB)</text>
+  <!-- Q output lines at top -->
+  <text x="95" y="25" fill="#4ec94e" font-size="9">Q₀</text>
+  <text x="225" y="25" fill="#4ec94e" font-size="9">Q₁</text>
+  <text x="355" y="25" fill="#4ec94e" font-size="9">Q₂</text>
+  <text x="485" y="25" fill="#4ec94e" font-size="9">Q₃</text>
+  <line x1="105" y1="35" x2="105" y2="25" stroke="#4ec94e" stroke-width="1"/>
+  <line x1="235" y1="35" x2="235" y2="25" stroke="#4ec94e" stroke-width="1"/>
+  <line x1="365" y1="35" x2="365" y2="25" stroke="#4ec94e" stroke-width="1"/>
+  <line x1="495" y1="35" x2="495" y2="25" stroke="#4ec94e" stroke-width="1"/>
+  <!-- Ripple annotation -->
+  <text x="90" y="150" fill="#8b949e" font-size="9">Each Q̄ output drives next FF's clock → carry ripples through stages (propagation delay accumulates)</text>
+  <text x="90" y="163" fill="#e85a4a" font-size="9">Problem: momentary wrong counts appear while carry propagates (glitches/hazards)</text>
+</svg>
+<div class="diag-lbl">4-Bit Ripple Counter — Q̄ of each stage clocks next stage (Negative Edge)</div>
+</div>
+
+<div class="sub">4-bit Ripple Counter Count Sequence</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>Clock</th><th>Q₃</th><th>Q₂</th><th>Q₁</th><th>Q₀</th><th>Decimal</th><th>Action</th></tr>
+<tr><td>Start</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>Reset</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td><td>Q₀ toggles</td></tr>
+<tr><td>2</td><td>0</td><td>0</td><td>1</td><td>0</td><td>2</td><td>Q₁ toggles (Q̄₀ fell)</td></tr>
+<tr><td>3</td><td>0</td><td>0</td><td>1</td><td>1</td><td>3</td><td>Q₀ toggles</td></tr>
+<tr><td>4</td><td>0</td><td>1</td><td>0</td><td>0</td><td>4</td><td>Q₂ toggles (Q̄₁ fell)</td></tr>
+<tr><td>7</td><td>0</td><td>1</td><td>1</td><td>1</td><td>7</td><td>-</td></tr>
+<tr><td>8</td><td>1</td><td>0</td><td>0</td><td>0</td><td>8</td><td>Q₃ toggles</td></tr>
+<tr><td>15</td><td>1</td><td>1</td><td>1</td><td>1</td><td>15</td><td>Max</td></tr>
+<tr class="tr-set"><td>16</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>Overflow → reset</td></tr>
+</table>
+</div>
+
+<div class="sub">Ripple Counter Timing Diagram</div>
+<div class="diag">
+<svg width="600" height="180" viewBox="0 0 600 180">
+  <text x="3" y="22" fill="#3dd9c8" font-size="10">CLK</text>
+  <text x="3" y="57" fill="#4ec94e" font-size="10">Q₀</text>
+  <text x="3" y="92" fill="#e88c4a" font-size="10">Q₁</text>
+  <text x="3" y="127" fill="#b07bff" font-size="10">Q₂</text>
+  <text x="3" y="162" fill="#e85a4a" font-size="10">Q₃</text>
+  <!-- CLK waveform (fast) -->
+  <polyline points="25,28 25,8 60,8 60,28 95,28 95,8 130,8 130,28 165,28 165,8 200,8 200,28 235,28 235,8 270,8 270,28 305,28 305,8 340,8 340,28 375,28 375,8 410,8 410,28 445,28 445,8 480,8 480,28 515,28 515,8 550,8 550,28 585,28" fill="none" stroke="#3dd9c8" stroke-width="1.5"/>
+  <!-- Q0 (divides CLK by 2) -->
+  <polyline points="25,63 60,63 60,43 95,43 95,63 130,63 130,43 165,43 165,63 200,63 200,43 235,43 235,63 270,63 270,43 305,43 305,63 340,63 340,43 375,43 375,63 410,63 410,43 445,43 445,63 480,63 480,43 515,43 515,63 550,63 550,43 585,43" fill="none" stroke="#4ec94e" stroke-width="2"/>
+  <!-- Q1 (divides CLK by 4) -->
+  <polyline points="25,98 95,98 95,78 165,78 165,98 235,98 235,78 305,78 305,98 375,98 375,78 445,78 445,98 515,98 515,78 585,78" fill="none" stroke="#e88c4a" stroke-width="2"/>
+  <!-- Q2 (divides CLK by 8) -->
+  <polyline points="25,133 165,133 165,113 305,113 305,133 445,133 445,113 585,113" fill="none" stroke="#b07bff" stroke-width="2"/>
+  <!-- Q3 (divides CLK by 16) -->
+  <polyline points="25,168 305,168 305,148 585,148" fill="none" stroke="#e85a4a" stroke-width="2"/>
+  <!-- Counts labels at top -->
+  <text x="38" y="4" fill="#556070" font-size="7">0</text>
+  <text x="72" y="4" fill="#556070" font-size="7">1</text>
+  <text x="107" y="4" fill="#556070" font-size="7">2</text>
+  <text x="142" y="4" fill="#556070" font-size="7">3</text>
+  <text x="177" y="4" fill="#556070" font-size="7">4</text>
+  <text x="212" y="4" fill="#556070" font-size="7">5</text>
+  <text x="247" y="4" fill="#556070" font-size="7">6</text>
+  <text x="282" y="4" fill="#556070" font-size="7">7</text>
+  <text x="317" y="4" fill="#556070" font-size="7">8</text>
+  <text x="352" y="4" fill="#556070" font-size="7">9</text>
+  <text x="387" y="4" fill="#556070" font-size="7">10</text>
+  <text x="420" y="4" fill="#556070" font-size="7">11</text>
+  <text x="452" y="4" fill="#556070" font-size="7">12</text>
+  <text x="487" y="4" fill="#556070" font-size="7">13</text>
+  <text x="520" y="4" fill="#556070" font-size="7">14</text>
+  <text x="555" y="4" fill="#556070" font-size="7">15</text>
+</svg>
+<div class="diag-lbl">Ripple Counter Timing — Each Q divides CLK frequency by 2 (Q₀ ÷2, Q₁ ÷4, Q₂ ÷8, Q₃ ÷16)</div>
+</div>
+</div>
+
+</div><!-- /L28 -->
+
+
+<!-- ═══════════════════════════════ LECTURE 29 ═══════════════════════════════ -->
+<div class="lec" id="l29">
+<div class="lec-hdr">
+  <span class="lec-num">LECTURE 29</span>
+  <h2 class="lec-title">Synchronous Counters — BCD · Up/Down · Parallel Load</h2>
+</div>
+
+<div class="card">
+<div class="card-title">1. Why Synchronous Counters?</div>
+<div class="g2">
+<div>
+<div class="def">In a <strong>synchronous counter</strong>, ALL flip-flops are clocked by the same clock signal simultaneously. Combinational logic determines which FFs should toggle.</div>
+<ul class="n">
+  <li>No ripple delay — all FFs change at same time</li>
+  <li>Maximum operating frequency is much higher</li>
+  <li>No momentary wrong states (no glitches)</li>
+  <li>Cost: more gates (carry logic between stages)</li>
+</ul>
+</div>
+<div>
+<div class="tbl-wrap">
+<table>
+<tr><th>Feature</th><th>Ripple</th><th>Synchronous</th></tr>
+<tr><td>CLK</td><td>Cascaded</td><td>Common to all</td></tr>
+<tr><td>Speed</td><td>n × t_FF</td><td>t_FF + t_gate</td></tr>
+<tr><td>Glitches</td><td>Yes</td><td>No</td></tr>
+<tr><td>Gates needed</td><td>Fewer</td><td>More</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">2. 4-bit Synchronous Up Counter — Design from Scratch</div>
+<p>Use T flip-flops. Observe when each bit toggles in binary counting:</p>
+<div class="g2">
+<div>
+<div class="tbl-wrap">
+<table>
+<tr><th>Q₃</th><th>Q₂</th><th>Q₁</th><th>Q₀</th><th>T₃</th><th>T₂</th><th>T₁</th><th>T₀</th></tr>
+<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+<tr><td>0</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+<tr><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+<tr><td>0</td><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td><td>1</td><td>1</td></tr>
+<tr><td>0</td><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+<tr><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td></tr>
+</table>
+</div>
+<p>Pattern: Q₀ toggles <em>every</em> clock. Q₁ toggles when Q₀=1. Q₂ toggles when Q₁·Q₀=1. Q₃ toggles when Q₂·Q₁·Q₀=1.</p>
+</div>
+<div>
+<div class="sub">T Input Equations</div>
+<div class="eq">T₀ = 1 (always toggles)</div>
+<div class="eq">T₁ = Q₀</div>
+<div class="eq">T₂ = Q₁·Q₀</div>
+<div class="eq">T₃ = Q₂·Q₁·Q₀</div>
+<div class="key"><strong>Pattern:</strong> Tₙ = Q_{n-1}·Q_{n-2}·...·Q₁·Q₀<br>This is carry ripple logic — AND all lower-order Q outputs together to form the enable for next stage.</div>
+</div>
+</div>
+
+<div class="sub">4-bit Synchronous Counter Circuit</div>
+<div class="diag">
+<svg width="580" height="180" viewBox="0 0 580 180">
+  <!-- Common CLK bus at bottom -->
+  <line x1="30" y1="165" x2="580" y2="165" stroke="#3dd9c8" stroke-width="2"/>
+  <text x="3" y="163" fill="#3dd9c8" font-size="10">CLK</text>
+  <!-- TFF 0 -->
+  <rect x="30" y="20" width="85" height="80" rx="7" fill="#151c27" stroke="#b07bff" stroke-width="2"/>
+  <text x="72" y="58" fill="#b07bff" font-size="12" text-anchor="middle" font-weight="700">TFF₀</text>
+  <text x="72" y="73" fill="#3dd9c8" font-size="9" text-anchor="middle">T₀=1</text>
+  <!-- CLK to TFF0 -->
+  <line x1="72" y1="100" x2="72" y2="165" stroke="#3dd9c8" stroke-width="1.5"/>
+  <!-- Q0 output -->
+  <line x1="115" y1="60" x2="580" y2="60" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="560" y="54" fill="#4ec94e" font-size="10">Q₀</text>
+  <!-- AND gate for T1 (just Q0) - no AND needed -->
+  <text x="162" y="92" fill="#e8c84a" font-size="9">T₁=Q₀</text>
+  <!-- TFF 1 -->
+  <rect x="155" y="20" width="85" height="80" rx="7" fill="#151c27" stroke="#b07bff" stroke-width="2"/>
+  <text x="197" y="58" fill="#b07bff" font-size="12" text-anchor="middle" font-weight="700">TFF₁</text>
+  <text x="197" y="73" fill="#3dd9c8" font-size="9" text-anchor="middle">T₁</text>
+  <line x1="197" y1="100" x2="197" y2="165" stroke="#3dd9c8" stroke-width="1.5"/>
+  <!-- Q0 wire to T1 input -->
+  <line x1="140" y1="60" x2="140" y2="20" stroke="#4ec94e" stroke-width="1" stroke-dasharray="3,2"/>
+  <line x1="140" y1="20" x2="155" y2="30" stroke="#4ec94e" stroke-width="1" stroke-dasharray="3,2"/>
+  <!-- Q1 output -->
+  <line x1="240" y1="60" x2="400" y2="60" stroke="#e88c4a" stroke-width="1.2" stroke-dasharray="5,2"/>
+  <text x="340" y="54" fill="#e88c4a" font-size="10">Q₁</text>
+  <!-- AND gate for T2 -->
+  <line x1="248" y1="25" x2="248" y2="48" stroke="#4ec94e" stroke-width="1.5"/>
+  <path d="M 248,25 Q 270,25 270,36 Q 270,48 248,48" fill="#151c27" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="255" y="38" fill="#4ec94e" font-size="7">AND</text>
+  <text x="252" y="62" fill="#e8c84a" font-size="9">T₂=Q₁·Q₀</text>
+  <!-- TFF 2 -->
+  <rect x="285" y="20" width="85" height="80" rx="7" fill="#151c27" stroke="#b07bff" stroke-width="2"/>
+  <text x="327" y="58" fill="#b07bff" font-size="12" text-anchor="middle" font-weight="700">TFF₂</text>
+  <text x="327" y="73" fill="#3dd9c8" font-size="9" text-anchor="middle">T₂</text>
+  <line x1="327" y1="100" x2="327" y2="165" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="270" y1="36" x2="285" y2="36" stroke="#4ec94e" stroke-width="1.5"/>
+  <!-- Q2 output -->
+  <line x1="370" y1="60" x2="420" y2="60" stroke="#b07bff" stroke-width="1.2" stroke-dasharray="5,2"/>
+  <!-- AND gate for T3 (3-input) -->
+  <line x1="378" y1="18" x2="378" y2="50" stroke="#4ec94e" stroke-width="1.5"/>
+  <path d="M 378,18 Q 405,18 405,34 Q 405,50 378,50" fill="#151c27" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="384" y="30" fill="#4ec94e" font-size="7">3-in</text>
+  <text x="384" y="42" fill="#4ec94e" font-size="7">AND</text>
+  <text x="378" y="64" fill="#e8c84a" font-size="8">T₃=Q₂Q₁Q₀</text>
+  <!-- TFF 3 -->
+  <rect x="418" y="20" width="85" height="80" rx="7" fill="#151c27" stroke="#b07bff" stroke-width="2"/>
+  <text x="460" y="58" fill="#b07bff" font-size="12" text-anchor="middle" font-weight="700">TFF₃</text>
+  <text x="460" y="73" fill="#3dd9c8" font-size="9" text-anchor="middle">T₃</text>
+  <line x1="460" y1="100" x2="460" y2="165" stroke="#3dd9c8" stroke-width="1.5"/>
+  <line x1="405" y1="34" x2="418" y2="34" stroke="#4ec94e" stroke-width="1.5"/>
+  <!-- Q3 out -->
+  <line x1="503" y1="55" x2="575" y2="55" stroke="#e85a4a" stroke-width="1.5"/>
+  <text x="555" y="49" fill="#e85a4a" font-size="10">Q₃</text>
+  <!-- Connect Q0,Q1 to AND2, Q0,Q1,Q2 to AND3 (simplified arrows) -->
+  <text x="30" y="15" fill="#7a8fa8" font-size="8">Carry chain: Q₀→T₁, Q₀Q₁→T₂, Q₀Q₁Q₂→T₃ (AND gates)</text>
+  <text x="30" y="175" fill="#7a8fa8" font-size="8">All FFs share same CLK — synchronous → no glitches, maximum speed</text>
+</svg>
+<div class="diag-lbl">4-Bit Synchronous Up Counter — All FFs on Common CLK with AND carry chain</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">3. BCD (Binary-Coded Decimal) Counter — Counts 0 to 9</div>
+<div class="def">A BCD counter counts 0000 through 1001 (0–9) then resets to 0000. States 1010–1111 are unused. After count 9 (1001), logic detects this state and forces a reset on the next clock.</div>
+<div class="g2">
+<div>
+<div class="tbl-wrap">
+<table>
+<tr><th>Count</th><th>Q₃</th><th>Q₂</th><th>Q₁</th><th>Q₀</th><th>BCD Digit</th></tr>
+<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td></tr>
+<tr><td>1</td><td>0</td><td>0</td><td>0</td><td>1</td><td>1</td></tr>
+<tr><td>2</td><td>0</td><td>0</td><td>1</td><td>0</td><td>2</td></tr>
+<tr><td>3</td><td>0</td><td>0</td><td>1</td><td>1</td><td>3</td></tr>
+<tr><td>4</td><td>0</td><td>1</td><td>0</td><td>0</td><td>4</td></tr>
+<tr><td>5</td><td>0</td><td>1</td><td>0</td><td>1</td><td>5</td></tr>
+<tr><td>6</td><td>0</td><td>1</td><td>1</td><td>0</td><td>6</td></tr>
+<tr><td>7</td><td>0</td><td>1</td><td>1</td><td>1</td><td>7</td></tr>
+<tr><td>8</td><td>1</td><td>0</td><td>0</td><td>0</td><td>8</td></tr>
+<tr class="tr-set"><td>9</td><td>1</td><td>0</td><td>0</td><td>1</td><td>9</td></tr>
+<tr class="tr-bad"><td>10</td><td>→ RESET to 0</td><td></td><td></td><td></td><td>(skip 10–15)</td></tr>
+</table>
+</div>
+</div>
+<div>
+<div class="sub">BCD Reset Logic</div>
+<p>Detect state 10 (Q₃=1, Q₁=1) and clear all FFs:</p>
+<div class="eq">RESET = Q₃·Q₁</div>
+<div class="diag">
+<svg width="230" height="100" viewBox="0 0 230 100">
+  <!-- AND gate -->
+  <line x1="60" y1="25" x2="60" y2="55" stroke="#4ec94e" stroke-width="1.5"/>
+  <path d="M 60,25 Q 90,25 90,40 Q 90,55 60,55" fill="#151c27" stroke="#e85a4a" stroke-width="1.5"/>
+  <!-- inputs -->
+  <line x1="10" y1="32" x2="60" y2="32" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="3" y="36" fill="#4ec94e" font-size="11">Q₃</text>
+  <line x1="10" y1="48" x2="60" y2="48" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="3" y="52" fill="#4ec94e" font-size="11">Q₁</text>
+  <!-- output to CLR -->
+  <line x1="90" y1="40" x2="150" y2="40" stroke="#e85a4a" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="100" y="35" fill="#e85a4a" font-size="10">CLR all FFs</text>
+  <!-- Counter box -->
+  <rect x="150" y="22" width="70" height="36" rx="4" fill="#151c27" stroke="#b07bff" stroke-width="1.5"/>
+  <text x="185" y="44" fill="#b07bff" font-size="10" text-anchor="middle">BCD CTR</text>
+  <text x="90" y="72" fill="#7a8fa8" font-size="9">Q₃·Q₁=1 → state 10 → reset</text>
+  <text x="90" y="84" fill="#7a8fa8" font-size="9">Momentary glitch: 10 appears for &lt;1ns then resets</text>
+</svg>
+<div class="diag-lbl">BCD Counter Reset: Detect 1010, Clear to 0000</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">4. Up/Down Counter with Control Input</div>
+<div class="def">An <strong>up/down counter</strong> counts up when the UP/D̄OWN control signal is 1, and counts down when it is 0.</div>
+<div class="g2">
+<div>
+<div class="sub">T Equations for Up/Down Counter</div>
+<div class="eq">T₀ = 1</div>
+<div class="eq">T₁ = (UP·Q₀) + (D̄OWN·Q̄₀) &nbsp; = UP⊕Q₀ simplified</div>
+<div class="eq">T₂ = (UP·Q₁·Q₀) + (D̄OWN·Q̄₁·Q̄₀)</div>
+<div class="eq">T₃ = (UP·Q₂·Q₁·Q₀) + (D̄OWN·Q̄₂·Q̄₁·Q̄₀)</div>
+<div class="key"><strong>Logic:</strong> For counting UP, carry = Q₁·Q₀ (all lower bits = 1). For counting DOWN, borrow = Q̄₁·Q̄₀ (all lower bits = 0). MUX selects which condition to use based on UP/DOWN signal.</div>
+</div>
+<div>
+<div class="tbl-wrap">
+<table>
+<tr><th>UP/DOWN</th><th>Direction</th><th>Example Sequence</th></tr>
+<tr class="tr-set"><td>1 (UP)</td><td>↑ Counting Up</td><td>0,1,2,3,...,15,0,1...</td></tr>
+<tr class="tr-rst"><td>0 (DOWN)</td><td>↓ Counting Down</td><td>15,14,13,...,1,0,15,14...</td></tr>
+</table>
+</div>
+<div class="diag">
+<svg width="240" height="120" viewBox="0 0 240 120">
+  <!-- Counter box -->
+  <rect x="60" y="25" width="130" height="70" rx="8" fill="#151c27" stroke="#4d9de0" stroke-width="2"/>
+  <text x="125" y="58" fill="#4d9de0" font-size="12" text-anchor="middle" font-weight="700">Up/Down</text>
+  <text x="125" y="73" fill="#4d9de0" font-size="12" text-anchor="middle" font-weight="700">Counter</text>
+  <!-- UP/DOWN input -->
+  <line x1="10" y1="60" x2="60" y2="60" stroke="#b07bff" stroke-width="1.5"/>
+  <text x="2" y="56" fill="#b07bff" font-size="9">UP</text>
+  <text x="2" y="66" fill="#b07bff" font-size="9">DN</text>
+  <!-- CLK input -->
+  <line x1="10" y1="88" x2="60" y2="88" stroke="#3dd9c8" stroke-width="1.5"/>
+  <polygon points="60,80 60,96 73,88" fill="#3dd9c8"/>
+  <text x="3" y="92" fill="#3dd9c8" font-size="9">CLK</text>
+  <!-- Count output -->
+  <line x1="190" y1="60" x2="230" y2="60" stroke="#4ec94e" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="230" y="56" fill="#4ec94e" font-size="8">Q₃Q₂Q₁Q₀</text>
+  <!-- Carry/Borrow -->
+  <line x1="190" y1="45" x2="225" y2="45" stroke="#e8c84a" stroke-width="1"/>
+  <text x="228" y="49" fill="#e8c84a" font-size="8">CO</text>
+  <line x1="190" y1="78" x2="225" y2="78" stroke="#e88c4a" stroke-width="1"/>
+  <text x="228" y="82" fill="#e88c4a" font-size="8">BO</text>
+  <!-- Labels -->
+  <text x="125" y="105" fill="#7a8fa8" font-size="8" text-anchor="middle">CO=Carry Out, BO=Borrow Out</text>
+</svg>
+<div class="diag-lbl">Up/Down Counter Symbol</div>
+</div>
+</div>
+</div>
+</div>
+
+</div><!-- /L29 -->
+
+<!-- ═══════════════════════════════ LECTURE 30 ═══════════════════════════════ -->
+<div class="lec" id="l30">
+<div class="lec-hdr">
+  <span class="lec-num">LECTURE 30</span>
+  <h2 class="lec-title">Memory — RAM, ROM, Organization, Chip Select, Memory Expansion</h2>
+</div>
+
+<div class="card">
+<div class="card-title">1. Memory Fundamentals</div>
+<div class="def">Memory stores binary data as an array of bits, organized into addressable locations. Address lines select which location to read or write.</div>
+<div class="g2">
+<div>
+<div class="sub">Key Memory Parameters</div>
+<ul class="n">
+  <li><strong>Address space:</strong> k address bits → 2ᵏ locations</li>
+  <li><strong>Word size:</strong> n data bits per location</li>
+  <li><strong>Capacity:</strong> 2ᵏ × n bits total</li>
+  <li>Example: 16×8 memory = 16 locations × 8 bits each = 128 bits total; needs 4 address bits</li>
+  <li>Usually written as: 2ᵏ × n → "2^k by n" memory chip</li>
+</ul>
+</div>
+<div>
+<div class="tbl-wrap">
+<table>
+<tr><th>Addresses</th><th>Addr Bits</th><th>Example Capacity</th></tr>
+<tr><td>16</td><td>4</td><td>16×8 = 128 bits</td></tr>
+<tr><td>256</td><td>8</td><td>256×8 = 2 Kbits</td></tr>
+<tr><td>1K</td><td>10</td><td>1K×8 = 8 Kbits</td></tr>
+<tr><td>4K</td><td>12</td><td>4K×8 = 32 Kbits</td></tr>
+<tr><td>64K</td><td>16</td><td>64K×8 = 512 Kbits</td></tr>
+</table>
+</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">2. Random Access Memory (RAM) — Types and Internal Structure</div>
+<div class="g2">
+<div>
+<div class="sub">SRAM (Static RAM)</div>
+<ul class="n">
+  <li>Each cell = 6 transistors (cross-coupled inverters + access transistors)</li>
+  <li>Holds data as long as power is on — no refresh needed</li>
+  <li>Very fast (used for CPU cache)</li>
+  <li>More expensive, larger cell, less dense</li>
+</ul>
+<div class="sub">DRAM (Dynamic RAM)</div>
+<ul class="n">
+  <li>Each cell = 1 transistor + 1 capacitor</li>
+  <li>Stores charge on capacitor — leaks away</li>
+  <li>Needs periodic <strong>refresh</strong> (every few ms)</li>
+  <li>Slower but much cheaper and denser</li>
+  <li>Used for main memory (DDR DRAM)</li>
+</ul>
+</div>
+<div>
+<div class="diag">
+<svg width="240" height="160" viewBox="0 0 240 160">
+  <!-- SRAM Cell (6-transistor) simplified -->
+  <rect x="10" y="10" width="105" height="65" rx="5" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <text x="62" y="32" fill="#4d9de0" font-size="10" text-anchor="middle" font-weight="700">SRAM Cell</text>
+  <!-- Cross-coupled inverters symbol -->
+  <polygon points="28,48 28,62 44,55" fill="#151c27" stroke="#4ec94e" stroke-width="1.2"/>
+  <circle cx="47" cy="55" r="3" fill="#151c27" stroke="#4ec94e" stroke-width="1.2"/>
+  <polygon points="80,48 80,62 64,55" fill="#151c27" stroke="#4ec94e" stroke-width="1.2"/>
+  <circle cx="61" cy="55" r="3" fill="#151c27" stroke="#4ec94e" stroke-width="1.2"/>
+  <!-- feedback wires -->
+  <line x1="51" y1="55" x2="58" y2="55" stroke="#4ec94e" stroke-width="1"/>
+  <line x1="47" y1="55" x2="55" y2="40" stroke="#4ec94e" stroke-width="1"/>
+  <line x1="55" y1="40" x2="75" y2="48" stroke="#4ec94e" stroke-width="1"/>
+  <text x="35" y="75" fill="#7a8fa8" font-size="8">6T — fast, no refresh</text>
+  <!-- DRAM Cell (1T+1C) -->
+  <rect x="128" y="10" width="105" height="65" rx="5" fill="#151c27" stroke="#b07bff" stroke-width="1.5"/>
+  <text x="180" y="32" fill="#b07bff" font-size="10" text-anchor="middle" font-weight="700">DRAM Cell</text>
+  <!-- Transistor symbol (simple) -->
+  <line x1="155" y1="45" x2="155" y2="65" stroke="#b07bff" stroke-width="1.5"/>
+  <line x1="155" y1="52" x2="168" y2="52" stroke="#b07bff" stroke-width="1.5"/>
+  <line x1="155" y1="58" x2="168" y2="58" stroke="#b07bff" stroke-width="1.5"/>
+  <line x1="162" y1="43" x2="162" y2="52" stroke="#b07bff" stroke-width="1.5"/>
+  <!-- Capacitor -->
+  <line x1="175" y1="50" x2="210" y2="50" stroke="#b07bff" stroke-width="1.5"/>
+  <line x1="210" y1="40" x2="210" y2="60" stroke="#b07bff" stroke-width="2"/>
+  <line x1="218" y1="40" x2="218" y2="60" stroke="#b07bff" stroke-width="2"/>
+  <line x1="218" y1="55" x2="228" y2="55" stroke="#b07bff" stroke-width="1"/>
+  <text x="140" y="75" fill="#7a8fa8" font-size="8">1T+1C — dense, needs refresh</text>
+  <!-- Memory Array diagram -->
+  <rect x="10" y="90" width="220" height="65" rx="5" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <text x="120" y="108" fill="#4d9de0" font-size="10" text-anchor="middle" font-weight="700">Memory Array Organization</text>
+  <!-- Grid of cells -->
+  <text x="18" y="125" fill="#4ec94e" font-size="8">Addr</text>
+  <text x="18" y="137" fill="#4ec94e" font-size="8">decoder</text>
+  <rect x="55" y="115" width="12" height="10" fill="#243040" stroke="#4d9de0" stroke-width=".5"/>
+  <rect x="70" y="115" width="12" height="10" fill="#243040" stroke="#4d9de0" stroke-width=".5"/>
+  <rect x="85" y="115" width="12" height="10" fill="#243040" stroke="#4d9de0" stroke-width=".5"/>
+  <rect x="100" y="115" width="12" height="10" fill="#243040" stroke="#4d9de0" stroke-width=".5"/>
+  <rect x="55" y="128" width="12" height="10" fill="#243040" stroke="#4d9de0" stroke-width=".5"/>
+  <rect x="70" y="128" width="12" height="10" fill="#243040" stroke="#4d9de0" stroke-width=".5"/>
+  <rect x="85" y="128" width="12" height="10" fill="#243040" stroke="#4d9de0" stroke-width=".5"/>
+  <rect x="100" y="128" width="12" height="10" fill="#243040" stroke="#4d9de0" stroke-width=".5"/>
+  <rect x="55" y="141" width="12" height="10" fill="#243040" stroke="#4d9de0" stroke-width=".5"/>
+  <rect x="70" y="141" width="12" height="10" fill="#243040" stroke="#4d9de0" stroke-width=".5"/>
+  <rect x="85" y="141" width="12" height="10" fill="#243040" stroke="#4d9de0" stroke-width=".5"/>
+  <rect x="100" y="141" width="12" height="10" fill="#243040" stroke="#4d9de0" stroke-width=".5"/>
+  <text x="120" y="150" fill="#7a8fa8" font-size="7">2ᵏ rows × n columns</text>
+  <!-- Data bus arrows -->
+  <text x="165" y="130" fill="#e88c4a" font-size="8">Data Bus</text>
+  <line x1="160" y1="120" x2="225" y2="120" stroke="#e88c4a" stroke-width="1.5" marker-end="url(#arr)"/>
+</svg>
+<div class="diag-lbl">SRAM vs DRAM Cell and Array Organization</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">3. RAM Functional Symbol &amp; Read/Write Operations</div>
+<div class="g2">
+<div>
+<div class="diag">
+<svg width="240" height="170" viewBox="0 0 240 170">
+  <!-- RAM chip -->
+  <rect x="65" y="15" width="110" height="140" rx="8" fill="#151c27" stroke="#4d9de0" stroke-width="2.5"/>
+  <text x="120" y="82" fill="#4d9de0" font-size="14" text-anchor="middle" font-weight="700">RAM</text>
+  <text x="120" y="98" fill="#7a8fa8" font-size="10" text-anchor="middle">2ᵏ × n</text>
+  <!-- Address pins -->
+  <line x1="10" y1="45" x2="65" y2="45" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="3" y="37" fill="#4ec94e" font-size="9">A₀</text>
+  <line x1="10" y1="58" x2="65" y2="58" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="3" y="50" fill="#4ec94e" font-size="9">A₁</text>
+  <text x="32" y="74" fill="#4ec94e" font-size="10">·</text>
+  <text x="32" y="80" fill="#4ec94e" font-size="10">·</text>
+  <line x1="10" y1="88" x2="65" y2="88" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="3" y="80" fill="#4ec94e" font-size="9">A_{k-1}</text>
+  <text x="38" y="40" fill="#4ec94e" font-size="9">k address</text>
+  <text x="38" y="50" fill="#4ec94e" font-size="9">inputs</text>
+  <!-- CS pin -->
+  <line x1="10" y1="115" x2="65" y2="115" stroke="#e8c84a" stroke-width="1.5"/>
+  <circle cx="65" cy="115" r="4" fill="#151c27" stroke="#e8c84a" stroke-width="1.5"/>
+  <text x="3" y="108" fill="#e8c84a" font-size="9">C̄S̄</text>
+  <text x="3" y="119" fill="#e8c84a" font-size="8">(chip select)</text>
+  <!-- WE pin -->
+  <line x1="10" y1="135" x2="65" y2="135" stroke="#b07bff" stroke-width="1.5"/>
+  <circle cx="65" cy="135" r="4" fill="#151c27" stroke="#b07bff" stroke-width="1.5"/>
+  <text x="3" y="128" fill="#b07bff" font-size="9">W̄Ē</text>
+  <text x="3" y="142" fill="#b07bff" font-size="8">(write enable)</text>
+  <!-- Data I/O pins -->
+  <line x1="175" y1="55" x2="225" y2="55" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="228" y="51" fill="#e88c4a" font-size="9">D₀</text>
+  <text x="210" y="70" fill="#e88c4a" font-size="10">·</text>
+  <text x="210" y="77" fill="#e88c4a" font-size="10">·</text>
+  <line x1="175" y1="88" x2="225" y2="88" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="227" y="84" fill="#e88c4a" font-size="9">D_{n-1}</text>
+  <text x="180" y="48" fill="#e88c4a" font-size="9">n data</text>
+  <text x="180" y="58" fill="#e88c4a" font-size="9">I/O pins</text>
+</svg>
+<div class="diag-lbl">RAM Chip Symbol — k address, n data, CS̄, WĒ pins</div>
+</div>
+</div>
+<div>
+<div class="sub">Read/Write Truth Table</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>C̄S̄</th><th>W̄Ē</th><th>Operation</th><th>Data Bus</th></tr>
+<tr class="tr-bad"><td>1</td><td>X</td><td>Not selected</td><td>Hi-Z (tristate)</td></tr>
+<tr class="tr-set"><td>0</td><td>1</td><td>Read</td><td>Memory → Data bus</td></tr>
+<tr class="tr-rst"><td>0</td><td>0</td><td>Write</td><td>Data bus → Memory</td></tr>
+</table>
+</div>
+<div class="key"><strong>Chip Select (C̄S̄):</strong> Active-LOW signal that enables the chip. When C̄S̄=1 (HIGH), the chip ignores all inputs and puts its data pins into high-impedance state (no output). This allows multiple chips to share a data bus.</div>
+<div class="sub">Read Operation Steps</div>
+<div class="steps">
+  <div class="step"><div class="sn">1</div><div>Assert C̄S̄=0 (select chip)</div></div>
+  <div class="step"><div class="sn">2</div><div>Set W̄Ē=1 (read mode)</div></div>
+  <div class="step"><div class="sn">3</div><div>Apply address on address pins</div></div>
+  <div class="step"><div class="sn">4</div><div>After access time t_acc, data appears on data bus</div></div>
+</div>
+<div class="sub">Write Operation Steps</div>
+<div class="steps">
+  <div class="step"><div class="sn">1</div><div>Assert C̄S̄=0 (select chip)</div></div>
+  <div class="step"><div class="sn">2</div><div>Apply address on address pins</div></div>
+  <div class="step"><div class="sn">3</div><div>Put data to write on data bus</div></div>
+  <div class="step"><div class="sn">4</div><div>Assert W̄Ē=0 (write enable) → data written to selected address</div></div>
+  <div class="step"><div class="sn">5</div><div>Deassert W̄Ē=1 before deassert C̄S̄</div></div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">4. ROM (Read-Only Memory)</div>
+<div class="def">ROM stores permanent or semi-permanent data. Contents are set at manufacturing or programming time. No write operation during normal operation.</div>
+<div class="g2">
+<div>
+<div class="sub">ROM Types</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>Type</th><th>Programmed By</th><th>Erasable?</th></tr>
+<tr><td style="color:#4d9de0">Mask ROM</td><td>Manufacturer</td><td>No (permanent)</td></tr>
+<tr><td style="color:#4ec94e">PROM</td><td>User (once only)</td><td>No (fuses)</td></tr>
+<tr><td style="color:#e88c4a">EPROM</td><td>User (many times)</td><td>UV light</td></tr>
+<tr><td style="color:#b07bff">EEPROM</td><td>User (many times)</td><td>Electrically</td></tr>
+<tr><td style="color:#3dd9c8">Flash</td><td>User (many times)</td><td>Electrically (sectors)</td></tr>
+</table>
+</div>
+</div>
+<div>
+<div class="sub">ROM as a Combinational Circuit</div>
+<p>A ROM with k address inputs and n data outputs implements any combinational function:</p>
+<div class="eq">2ᵏ rows × n bits = n combinational functions of k variables</div>
+<div class="diag">
+<svg width="210" height="110" viewBox="0 0 210 110">
+  <!-- ROM block -->
+  <rect x="60" y="15" width="100" height="80" rx="7" fill="#151c27" stroke="#e88c4a" stroke-width="2"/>
+  <text x="110" y="52" fill="#e88c4a" font-size="12" text-anchor="middle" font-weight="700">ROM</text>
+  <text x="110" y="67" fill="#7a8fa8" font-size="10" text-anchor="middle">2ᵏ × n</text>
+  <!-- Addr inputs -->
+  <line x1="5" y1="40" x2="60" y2="40" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="2" y="35" fill="#4ec94e" font-size="8">A</text>
+  <text x="5" y="55" fill="#4ec94e" font-size="8">k bits</text>
+  <!-- Data output -->
+  <line x1="160" y1="55" x2="205" y2="55" stroke="#b07bff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="207" y="51" fill="#b07bff" font-size="8">D</text>
+  <text x="205" y="66" fill="#b07bff" font-size="8">n bits</text>
+  <!-- No WE pin! -->
+  <text x="70" y="90" fill="#3dd9c8" font-size="8">No WĒ pin (read only)</text>
+</svg>
+</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">5. Memory Expansion — Increasing Word Length and Address Space</div>
+<div class="g2">
+<div>
+<div class="sub">Word Length Expansion (Increase data bits)</div>
+<p>Connect chips in parallel — same address goes to all chips, each provides some data bits.</p>
+<div class="diag">
+<svg width="270" height="130" viewBox="0 0 270 130">
+  <!-- Two 4×4 chips combined to make 4×8 -->
+  <rect x="80" y="15" width="80" height="45" rx="5" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <text x="120" y="42" fill="#4d9de0" font-size="10" text-anchor="middle">Chip 1 (4×4)</text>
+  <rect x="80" y="75" width="80" height="45" rx="5" fill="#151c27" stroke="#b07bff" stroke-width="1.5"/>
+  <text x="120" y="102" fill="#b07bff" font-size="10" text-anchor="middle">Chip 2 (4×4)</text>
+  <!-- Common address bus -->
+  <line x1="10" y1="60" x2="10" y2="105" stroke="#4ec94e" stroke-width="1.5"/>
+  <line x1="10" y1="60" x2="80" y2="37" stroke="#4ec94e" stroke-width="1.5"/>
+  <line x1="10" y1="105" x2="80" y2="97" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="3" y="82" fill="#4ec94e" font-size="8">A (2-bit)</text>
+  <text x="3" y="92" fill="#4ec94e" font-size="8">shared</text>
+  <!-- Data outputs -->
+  <line x1="160" y1="37" x2="200" y2="37" stroke="#4d9de0" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="203" y="41" fill="#4d9de0" font-size="8">D₃..D₀</text>
+  <line x1="160" y1="97" x2="200" y2="97" stroke="#b07bff" stroke-width="1.5" marker-end="url(#arr)"/>
+  <text x="203" y="101" fill="#b07bff" font-size="8">D₇..D₄</text>
+  <!-- Result label -->
+  <text x="50" y="125" fill="#e8c84a" font-size="9">Combined: 4×8 (8-bit word)</text>
+</svg>
+<div class="diag-lbl">Word Length Expansion: 2 chips of 4×4 → 4×8</div>
+</div>
+</div>
+<div>
+<div class="sub">Address Space Expansion (Increase locations)</div>
+<p>Stack chips so only one is selected at a time using a decoder and chip select lines.</p>
+<div class="diag">
+<svg width="270" height="155" viewBox="0 0 270 155">
+  <!-- 2:4 decoder -->
+  <rect x="5" y="60" width="55" height="60" rx="4" fill="#151c27" stroke="#e8c84a" stroke-width="1.5"/>
+  <text x="32" y="88" fill="#e8c84a" font-size="9" text-anchor="middle">2:4</text>
+  <text x="32" y="100" fill="#e8c84a" font-size="9" text-anchor="middle">decoder</text>
+  <!-- High-order addr bits to decoder -->
+  <line x1="5" y1="75" x2="5" y2="75" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="3" y="58" fill="#4ec94e" font-size="8">A_{k+1}</text>
+  <line x1="32" y1="55" x2="32" y2="60" stroke="#4ec94e" stroke-width="1.5"/>
+  <!-- Chip 1 (CS0) -->
+  <rect x="100" y="10" width="80" height="35" rx="4" fill="#151c27" stroke="#4d9de0" stroke-width="1.5"/>
+  <text x="140" y="31" fill="#4d9de0" font-size="9" text-anchor="middle">Chip 0 (addr 0-3)</text>
+  <!-- Chip 2 (CS1) -->
+  <rect x="100" y="55" width="80" height="35" rx="4" fill="#151c27" stroke="#b07bff" stroke-width="1.5"/>
+  <text x="140" y="76" fill="#b07bff" font-size="9" text-anchor="middle">Chip 1 (addr 4-7)</text>
+  <!-- Chip 3 (CS2) -->
+  <rect x="100" y="100" width="80" height="35" rx="4" fill="#151c27" stroke="#4ec94e" stroke-width="1.5"/>
+  <text x="140" y="121" fill="#4ec94e" font-size="9" text-anchor="middle">Chip 2 (addr 8-11)</text>
+  <!-- CS lines from decoder -->
+  <line x1="60" y1="72" x2="100" y2="27" stroke="#4d9de0" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <line x1="60" y1="82" x2="100" y2="72" stroke="#b07bff" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <line x1="60" y1="92" x2="100" y2="117" stroke="#4ec94e" stroke-width="1.2" stroke-dasharray="3,2"/>
+  <text x="62" y="70" fill="#e8c84a" font-size="8">CS₀</text>
+  <text x="62" y="80" fill="#e8c84a" font-size="8">CS₁</text>
+  <text x="62" y="92" fill="#e8c84a" font-size="8">CS₂</text>
+  <!-- Shared data bus -->
+  <line x1="180" y1="27" x2="250" y2="27" stroke="#e88c4a" stroke-width="1.5"/>
+  <line x1="180" y1="72" x2="250" y2="72" stroke="#e88c4a" stroke-width="1.5"/>
+  <line x1="180" y1="117" x2="250" y2="117" stroke="#e88c4a" stroke-width="1.5"/>
+  <line x1="250" y1="27" x2="250" y2="117" stroke="#e88c4a" stroke-width="1.5"/>
+  <text x="252" y="75" fill="#e88c4a" font-size="8">Shared</text>
+  <text x="252" y="85" fill="#e88c4a" font-size="8">Data Bus</text>
+  <text x="40" y="148" fill="#7a8fa8" font-size="8">High-order addr bits select which chip via decoder</text>
+</svg>
+<div class="diag-lbl">Address Space Expansion: Decoder selects chip; low-order addr bits select location within chip</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="card">
+<div class="card-title">6. Comparison: Static vs Dynamic, RAM vs ROM Summary</div>
+<div class="tbl-wrap">
+<table>
+<tr><th>Property</th><th style="color:#4d9de0">SRAM</th><th style="color:#4ec94e">DRAM</th><th style="color:#e88c4a">ROM</th><th style="color:#b07bff">Flash</th></tr>
+<tr><td>Speed</td><td>Very Fast</td><td>Slower</td><td>Fast</td><td>Slow (write)</td></tr>
+<tr><td>Refresh</td><td>No</td><td>Yes (ms)</td><td>N/A</td><td>N/A</td></tr>
+<tr><td>Volatile</td><td>Yes</td><td>Yes</td><td>No</td><td>No</td></tr>
+<tr><td>Density</td><td>Low (6T/cell)</td><td>High (1T/cell)</td><td>Very High</td><td>High</td></tr>
+<tr><td>Cost/bit</td><td>High</td><td>Low</td><td>Very Low</td><td>Low-Medium</td></tr>
+<tr><td>Application</td><td>CPU Cache</td><td>Main RAM</td><td>Firmware</td><td>USB/SSD</td></tr>
+<tr><td>Write</td><td>Yes (fast)</td><td>Yes</td><td>No</td><td>Yes (slow)</td></tr>
+</table>
+</div>
+</div>
+
+</div><!-- /L30 -->
+
+</div><!-- /wrap -->
+
+<!-- ── BACK TO TOP ── -->
+<div style="position:fixed;bottom:1.5rem;right:1.5rem;z-index:100">
+  <a href="#topnav" style="
+    display:flex;align-items:center;justify-content:center;
+    width:40px;height:40px;border-radius:50%;
+    background:var(--blue);color:var(--bg);text-decoration:none;
+    font-weight:700;font-size:18px;box-shadow:0 4px 16px rgba(77,157,224,.35)">↑</a>
+</div>
+
+</body>
+</html>
